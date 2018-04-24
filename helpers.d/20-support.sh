@@ -6,7 +6,7 @@ get_shell() {
 
 shell_supported() {
 	case "$@" in
-		"zsh")
+		"bash")
 			true && return;
 			;;
 		*)
@@ -16,11 +16,13 @@ shell_supported() {
 }
 
 check_support() {
+	assert_command readlink;
+	assert_command dirname;
 	assert_command basename;
 }
 
 assert_command() {
-	if ! command -v $@ >/dev/null 2>&1; then
+	if ! command_available "$@"; then
 		abort "Command $@ not supported.\nPlease check your \$PATH";
 	fi
 }
