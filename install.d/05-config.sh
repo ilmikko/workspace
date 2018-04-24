@@ -7,8 +7,7 @@
 echo;
 if [ -f "./install.conf" ]; then
 	echo "The configuration file was found in $(realpath ./install.conf).";
-	echo "Do you want to use this file?";
-	if [ $(confirm) ]; then
+	if assume "Do you want to use this file"; then
 		# Next file
 		echo "USING FILE";
 		. $@;
