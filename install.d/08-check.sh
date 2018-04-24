@@ -7,11 +7,8 @@
 echo "Checking environment variables...";
 
 # Install device is set
-if [ "x$OOS_INSTALL_DEVICE"=="x" ]; then
+if [ "x$OOS_INSTALL_DEVICE" = "x" ]; then
 	abort "OOS_INSTALL_DEVICE not set.";
-	echo "OOS_INSTALL_DEVICE not set.";
-	echo "Aborting.";
-	exit 1;
 fi
 
 . $@;
