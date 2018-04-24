@@ -4,9 +4,9 @@
 # The idea is to only ask the user once so that no one has to babysit the installation process.
 
 # An option to fast track if the config file is found already
-echo;
+log;
 if [ -f "./install.conf" ]; then
-	echo "The configuration file was found in $(realpath ./install.conf).";
+	log "The configuration file was found in $(realpath ./install.conf).";
 	if assume "Do you want to use this file"; then
 		# Load the file
 		. ./install.conf;
@@ -17,7 +17,7 @@ if [ -f "./install.conf" ]; then
 	fi
 fi
 
-echo "Please configure the installation below.";
+log "Please configure the installation below.";
 # TODO: More configuration options
 read;
 

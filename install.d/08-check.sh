@@ -4,7 +4,7 @@
 # This script also annotates if there are any potentially dangerous options.
 # 
 
-echo "Checking environment variables...";
+log "Checking environment variables...";
 
 # Install device is set
 if [ "x$OOS_INSTALL_DEVICE" = "x" ]; then
