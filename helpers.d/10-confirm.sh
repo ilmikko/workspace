@@ -1,4 +1,4 @@
-function confirm(){
+confirm(){
 	read -r -p "$1 [y/N]? " confirmation;
 	case "$confirmation" in
 		[Yy][Ee][Ss]|[Yy])
@@ -9,7 +9,8 @@ function confirm(){
 			;;
 	esac
 }
-function assume(){
+
+assume(){
 	read -r -p "$1 [Y/n]? " confirmation;
 	case "$confirmation" in
 		[Nn][Oo]|[Nn])
@@ -20,3 +21,5 @@ function assume(){
 			;;
 	esac
 }
+
+. $@;
