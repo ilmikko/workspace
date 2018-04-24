@@ -31,6 +31,8 @@ if ! command_available command; then
 	fatal_error "Cannot determine which commands are available.";
 fi
 
+# Sourcing files
+
 if ! command_available .; then
 	# Try using 'source' to source files
 	if ! command_available source; then
@@ -45,6 +47,15 @@ if ! command_available .; then
 	fi
 fi
 
+# Dirname
+
+if ! command_available dirname; then
+	fatal_error "Cannot determine directory names without dirname.";
+fi
+
+# Change working directory to the directory of the install script
+cd $(dirname $0);
+
 # Get the helpers
 . ./helpers.d/*;
 
@@ -56,9 +67,6 @@ fi
 
 # Check that we have all the prerequisite binaries
 check_support;
-
-# Change working directory to the directory of the install script
-cd $(dirname $0);
 
 debug "Initializing...";
 
