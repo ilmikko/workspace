@@ -1,13 +1,24 @@
 # Various logging utilities
 
-function error(){
-	echo "[31mError: $@[m";
+# Consistent echo across devices, if possible
+if command -v printf >/dev/null 2>&1; then
+	log(){
+		printf "$@\n";
+	}
+else
+	log(){
+		echo -e "$@";
+	}
+fi
+
+error(){
+	log "[31mError: $@[m";
 }
-function warning(){
-	echo "[33mWarning: $@[m";
+warning(){
+	log "[33mWarning: $@[m";
 }
-function debug(){
-	echo "[34mDebug: $@[m";
+debug(){
+	log "[34mDebug: $@[m";
 }
 
 . $@;
