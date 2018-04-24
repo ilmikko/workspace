@@ -14,7 +14,7 @@ echo "You are about to install a new linux workspace on $OOS_INSTALL_DEVICE.";
 echo "Please type in uppercase YES to begin the installation process.";
 read -p '> ' confirmation;
 
-if [ $confirmation == "YES" ]; then
+if [ $confirmation = "YES" ]; then
 	echo "Starting installation... you might want to grab a cup of tea now.";
 	# Next file, after confirmation
 	. $@;
