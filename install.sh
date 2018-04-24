@@ -18,7 +18,13 @@ echo "Preparing...";
 # Get the helpers
 . ./helpers.d/*;
 
-echo "Initializing...";
+# Test that the helpers are sane
+if ! sane; then
+	echo "Error: Cannot continue; helpers are insane.";
+	exit 2;
+fi
+
+debug "Initializing...";
 
 # Call the rest of our scripts in order.
 . ./install.d/*;
