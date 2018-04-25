@@ -3,7 +3,16 @@
 # Probes some system information that is useful during the installation process.
 #
 
+# Requirements: sudo
+
 log "Getting system information...";
+
+# If not running as root, try again as root.
+if [ "$EUID" != 0 ]; then
+	log "Not running as root, retrying as root...";
+	sudo $0 $@;
+	exit;
+fi
 
 OOS_DISTRIBUTION=$(distribution);
 

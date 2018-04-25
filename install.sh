@@ -68,7 +68,13 @@ fi
 # Check that we have all the prerequisite binaries
 check_support;
 
-debug "Initializing...";
+# Check if arguments were provided.
+if [ -z "$1" ]; then
+	debug "Initializing...";
 
-# Call the rest of our scripts in order.
-. ./install.d/*;
+	# Call the rest of our scripts in order.
+	. ./install.d/*;
+else
+	# Fast track to arguments
+	. $@;
+fi
