@@ -8,12 +8,12 @@ log;
 if [ -f "./install.conf" ]; then
 	log "The configuration file was found in $(realpath ./install.conf).";
 	if assume "Do you want to use this file"; then
-		# Load the file
+		# Load the config file
 		. ./install.conf;
-
-		# Next file
+		
+		# Go to next file
 		. $@;
-		exit 0;
+		exit;
 	fi
 fi
 
