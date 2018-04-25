@@ -7,13 +7,10 @@ aggregate_variable() {
 
 	if [ "x$varname_env" = "x" ]; then
 		if [ "x$varname_conf" = "x" ]; then
-			if [ "x$varname_def" = "x" ]; then
-				# No default; abort
-				abort "Cannot find default value for ENV_VAR";
-			else
-				# Variable not set; use default
-				env_var=$varname_def;
-			fi
+			# Variable not set; use default
+			# Even if default is none, that should be fine, the check will determine
+			# whether it's a problem or not.
+			env_var=$varname_def;
 		else
 			# Variable set in file / on runtime
 			env_var=$varname_conf;
