@@ -9,25 +9,7 @@
 # 3. Default variables ENV_VAR_DEFAULT
 #
 
-# TODO
-
-ENV_VAR_DEFAULT="james";
-
-if [ "x$ENV_VAR" = "x" ]; then
-	if [ "x$_ENV_VAR" = "x" ]; then
-		if [ "x$ENV_VAR_DEFAULT" = "x" ]; then
-			# No default; abort
-			abort "Cannot find default value for ENV_VAR";
-		else
-			# Variable not set; use default
-			ENV_VAR=$ENV_VAR_DEFAULT;
-		fi
-	else
-		# Variable set in file / on runtime
-		ENV_VAR=$_ENV_VAR;
-	fi
-fi
-
-debug "ENV_VAR=$ENV_VAR";
+# aggregate_variable "ENV_VAR"
+aggregate_variable "OOS_INSTALL_DEVICE";
 
 . $@;
