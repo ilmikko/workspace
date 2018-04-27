@@ -6,6 +6,13 @@ to_bytes() {
 	echo $1 | awk -f awk/to_bytes.awk;
 }
 
+# Convert bytes to a byte declaration
+# For example, 1000000 bytes -> 976.6KiB
+# (do note that this is a destructive operation, only for the sake of human readability)
+from_bytes() {
+	echo $1 | awk -f awk/from_bytes.awk;
+}
+
 # Get percentage of a value
 percentage() {
 	echo $1 $2 | awk -f awk/percentage.awk;
