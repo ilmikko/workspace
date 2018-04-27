@@ -21,9 +21,9 @@ fi
 
 # PARTITIONING
 # There must be enough space on the disk
-bytes_available=$(parted "$OOS_INSTALL_DEVICE" unit B print 2>/dev/null | awk '/dev/ { gsub("B$","",$3); print $3}');
+bytes_available=$(parted "$OOS_INSTALL_DEVICE" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3}');
 # parted /dev/sda unit B print | awk '/dev/ { gsub("B$","",$3); total = total + $3; } END { printf total }'
 
-echo $bytes_available;
+echo There is $(from_bytes $bytes_available) available on $OOS_INSTALL_DEVICE;
 
 . $@;
