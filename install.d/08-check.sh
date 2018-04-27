@@ -5,6 +5,8 @@
 # This script also annotates if there are any potentially dangerous options.
 # 
 
+# requires: parted, awk, grep
+
 log "Checking environment variables...";
 
 # OOS_INSTALL_DEVICE
@@ -13,13 +15,14 @@ if [ "x$OOS_INSTALL_DEVICE" = "x" ]; then
 	abort "OOS_INSTALL_DEVICE not set.";
 fi
 # Install device must exist
-if ! [ -f "$OOS_INSTALL_DEVICE" ]; then
+if ! [ -a "$OOS_INSTALL_DEVICE" ]; then
 	abort "Device $OOS_INSTALL_DEVICE does not exist.";
 fi
 
 # PARTITIONING
 # There must be enough space on the disk
-bytes_available=$(parted "$OOS_INSTALL_DEVICE" unit B print 2>/dev/null);
+bytes_available=$(parted "$OOS_INSTALL_DEVICE" unit B print 2>/dev/null | awk '/dev/ { gsub("B$","",$3); print $3}');
+# parted /dev/sda unit B print | awk '/dev/ { gsub("B$","",$3); total = total + $3; } END { printf total }'
 
 echo $bytes_available;
 
