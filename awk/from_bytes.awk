@@ -1,8 +1,9 @@
 #!/usr/bin/env awk
+function abs(v) { return v < 0 ? -v : v }
 {
 	bytes=$1;
 
-	order=log(bytes)/log(2);
+	order=log(abs(bytes))/log(2);
 
 	# Remove decimal part
 	sub("\\..*$","",order);
