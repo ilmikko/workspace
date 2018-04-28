@@ -12,4 +12,11 @@
 # aggregate_variable "ENV_VAR"
 aggregate_variable "OOS_INSTALL_DEVICE";
 
+# aggregate partitions
+aggregate_variable "OOS_ROOT_SIZE";
+aggregate_variable "OOS_SWAP_SIZE";
+aggregate_variable "OOS_VAR_SIZE";
+aggregate_variable "OOS_HOME_SIZE";
+aggregate_variable "OOS_BOOT_SIZE";
+
 . $@;
