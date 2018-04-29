@@ -1,38 +1,28 @@
-# 
-# 0.8. Check
-# Check that the script has all the variables it needs to perform a full installation.
-# Convert everything vague to solid instructions now; we have all the information needed.
-# This script also annotates if there are any potentially dangerous options.
-# 
+#
+# 0.8.1. Partition check
+# Check that the disk has enough space for the partitions, and the
+# partitions make sense (e.g. percentages sum up to 100%)
+#
 
-# requires: parted, awk, grep
-
-log "Checking environment variables...";
-
-# OOS_INSTALL_DEVICE
-# Install device must be set
-if [ "x$OOS_INSTALL_DEVICE" = "x" ]; then
-	abort "OOS_INSTALL_DEVICE not set.";
-fi
-# Install device must exist
-if ! [ -a "$OOS_INSTALL_DEVICE" ]; then
-	abort "Device $OOS_INSTALL_DEVICE does not exist.";
-fi
-
-# PARTITIONING
 # TODO: This partitioning section needs some heavy cleaning up.
 # TODO: I need to figure out lists in bash properly
 
-# There must be enough space on the disk
-available_space=$(parted "$OOS_INSTALL_DEVICE" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3}');
-# parted /dev/sda unit B print | awk '/dev/ { gsub("B$","",$3); total = total + $3; } END { printf total }'
+# Input: a device /dev/* of which space to check.
+get_available_space() {
+	parted "$1" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3; }';
+}
 
+# There must be enough space on the disk
+available_space=$(get_available_space "$OOS_INSTALL_DEVICE");
 available_space_human=$(from_bytes $available_space);
 
-echo There is $available_space_human available on $OOS_INSTALL_DEVICE;
+log "There is $available_space_human available on $OOS_INSTALL_DEVICE";
 
 # Take absolute sizes first, check that there is space available
 partitions="ROOT $OOS_ROOT_SIZE SWAP $OOS_SWAP_SIZE BOOT $OOS_BOOT_SIZE VAR $OOS_VAR_SIZE HOME $OOS_HOME_SIZE";
+partitions_new=(ROOT $OOS_ROOT_SIZE);
+
+exit 255;
 
 # convert partitions to bytes, where available (ignore % for now)
 partition_count=5;
@@ -71,7 +61,6 @@ if [ "$remaining_space" -le "0" ]; then
 fi
 
 # TODO: Convert the percentages to percentages between 0%..100%?
-# TODO: Or a check that they all add up to 100%?
 
 # Check that the percentages add up to 100%
 percentage_sum=$(echo $partitions | awk '{ for (i=1; i<=NF; i+=2) { perc=$(i+1); if (perc ~ /%$/){ total+=perc; } } } END { print total; }');
@@ -97,7 +86,9 @@ done
 
 echo Partition table:;
 for (( i=1; i<=partition_count*2; i=i+2 )); do
+	# Partition names
 	echo $partitions | awk '{ printf("Part "$('$i')": "); }';
+	# Partition sizes
 	echo $partitions | awk '{ print($('$i'+1)); }' | awk -f awk/from_bytes.awk;
 done
 
