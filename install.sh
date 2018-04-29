@@ -31,6 +31,18 @@ if ! command_available command; then
 	fatal_error "Cannot determine which commands are available.";
 fi
 
+# If not running as root, try again as root.
+if [ "$EUID" != 0 ]; then
+	if command_available sudo; then
+		echo "Not running as root, retrying as root...";
+		sudo $0 $@;
+		exit;
+	else
+		fatal_error "Not running as root and sudo not found. Please run the script as root manually.";
+	fi
+fi
+
+
 # Sourcing files
 
 if ! command_available .; then
