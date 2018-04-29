@@ -24,4 +24,12 @@ aggregate_variable() {
 	export $1=$env_var;
 }
 
+oos_set() {
+	export $1=$2;
+}
+
+oos_get() {
+	echo $(eval echo "\$$1");
+}
+
 . $@;
