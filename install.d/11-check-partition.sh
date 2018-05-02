@@ -4,9 +4,6 @@
 # partitions make sense (e.g. percentages sum up to 100%)
 #
 
-# TODO: This partitioning section needs some heavy cleaning up.
-# TODO: I need to figure out lists in bash properly
-
 # Input: a device /dev/* of which space to check.
 get_available_space() {
 	parted "$1" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3; }';
@@ -19,7 +16,9 @@ available_space_human=$(from_bytes $available_space);
 log "There is $available_space_human available on $OOS_INSTALL_DEVICE";
 
 # Take absolute sizes first, check that there is space available
-partitions=($(cat config.d/partitions));
+partitions=$OOS_PARTITION_LIST;
+
+echo ${OOS_PARTITION_LIST[@]}
 
 join_by() {
 	local IFS="$1"; shift; echo "$*";
@@ -29,7 +28,7 @@ is_percentage() {
 	[[ $1 == *\% ]];
 }
 
-# TODO: Split the array into two (absolutes and relatives) and deal with those.
+# Split the array into two (absolutes and relatives) and deal with those.
 absolutes=($(printf "%s\n" ${partitions[@]} | awk -F':' '{ size=$2; if (sub("%$","",size)==0) print $0 }'));
 relatives=($(printf "%s\n" ${partitions[@]} | awk -F':' '{ size=$2; if (sub("%$","",size)!=0) print $0 }'));
 
@@ -90,6 +89,7 @@ for (( i=0; i<${#relatives[@]}; i++ )) do
 	relatives[$i]=$(join_by ':' ${item[@]});
 done
 
+# TODO: Pretty print the table / re-join the arrays
 echo Partition table:;
 echo ${absolutes[*]} ${relatives[*]}
 
