@@ -1,5 +1,14 @@
 # Helpers for (environment) variables
 
+variable_load_file() {
+	cat $@;
+}
+
+variable_is_file() {
+	# Variable is a callable file if it exists AND starts with ./
+	[[ "$1" == "./"* ]] && [ -a "$1" ];
+}
+
 aggregate_variable() {
 	varname_env=$(eval echo "\$$1");
 	varname_conf=$(eval echo "\$_$1");
@@ -20,8 +29,13 @@ aggregate_variable() {
 		env_var=$varname_env;
 	fi
 
+	# If the variable name is a file, load it to env_var
+	if variable_is_file $env_var; then
+		env_var=$(variable_load_file $env_var);
+	fi
+
 	# Finally, update the original variable
-	export $1=$env_var;
+	export $1="$env_var";
 }
 
 oos_set() {
