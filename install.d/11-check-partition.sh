@@ -9,6 +9,15 @@ get_available_space() {
 	parted "$1" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3; }';
 }
 
+get_root_partition() {
+	mount | grep 'on / ' | awk '{ print $1 }';
+}
+
+# Warn if we are writing on /dev/sda (or whichever is the root partition)
+if [[ "$(get_root_partition)" == "$OOS_INSTALL_DEVICE"* ]]; then
+	confirm "$OOS_INSTALL_DEVICE seems to be the root device. Are you sure you want to overwrite the current system" || abort "Installation cancelled.";
+fi
+
 # There must be enough space on the disk
 available_space=$(get_available_space "$OOS_INSTALL_DEVICE");
 available_space_human=$(from_bytes $available_space);

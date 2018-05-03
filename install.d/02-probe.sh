@@ -3,8 +3,6 @@
 # Probes some system information that is useful during the installation process.
 #
 
-# Requirements: sudo
-
 log "Getting system information...";
 OOS_DISTRIBUTION=$(distribution);
 
@@ -24,5 +22,13 @@ case "$OOS_DISTRIBUTION" in
 		confirm "Are you sure you want to continue" || exit 0;
 		;;
 esac
+
+# TODO: I'm not sure where these should go as of now
+log "Command check...";
+
+assert_command awk;
+assert_command sudo;
+assert_command parted;
+assert_command mount;
 
 . $@;
