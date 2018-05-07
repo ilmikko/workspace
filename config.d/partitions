@@ -1,5 +1,5 @@
-ROOT:25%:/
-SWAP:2GB:swap
-BOOT:222MiB:/boot
-HOME:75%:/home
-VAR:4GiB:/var
+ROOT:25%:/:ext4
+SWAP:2GB:swap:swap
+BOOT:222MiB:/boot:fat32
+HOME:75%:/home:ext4
+VAR:4GiB:/var:ext4
