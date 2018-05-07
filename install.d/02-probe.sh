@@ -30,5 +30,7 @@ assert_command awk;
 assert_command sudo;
 assert_command parted;
 assert_command mount;
+assert_command fdisk;
+assert_command printf;
 
 . $@;

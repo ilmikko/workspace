@@ -6,12 +6,29 @@
 
 # Input: a device /dev/* of which space to check.
 get_available_space() {
-	parted "$1" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3; }';
+	#parted "$1" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3; }';
+	fdisk -l "$1" | awk '/\/dev\/.*:/ { print $5 }';
 }
 
 get_root_partition() {
 	mount | grep 'on / ' | awk '{ print $1 }';
 }
+
+pretty_print_partitions() {
+	combined=$1;
+	echo "Partition List:";
+	for (( i=0; i<${#combined[@]}; i++ )) do
+		split=(${combined[$i]//:/ });
+		
+		name=${split[0]};
+		bytes=$(from_bytes ${split[1]});
+		mount=${split[2]};
+
+		printf "%-12s%-10s%10s\n" $name $mount $bytes;
+	done
+}
+
+log "Checking partitioning settings...";
 
 # Warn if we are writing on /dev/sda (or whichever is the root partition)
 if [[ "$(get_root_partition)" == "$OOS_INSTALL_DEVICE"* ]]; then
@@ -47,7 +64,7 @@ for (( i=0; i<${#absolutes[@]}; i++ )) do
 	item=(${absolutes[$i]//:/ })
 
 	size=${item[1]};
-	echo "Item size: ${item[1]}";
+	debug "Item size: ${item[1]}";
 
 	# update item size
 	item[1]=$(to_bytes $size);
@@ -99,7 +116,6 @@ for (( i=0; i<${#relatives[@]}; i++ )) do
 done
 
 # TODO: Pretty print the table / re-join the arrays
-echo Partition table:;
-echo ${absolutes[*]} ${relatives[*]}
-
+combined=("${absolutes[@]}" "${relatives[@]}");
+pretty_print_partitions $combined;
 . $@;
