@@ -35,6 +35,29 @@ if [[ "$(get_root_partition)" == "$OOS_INSTALL_DEVICE"* ]]; then
 	confirm "$OOS_INSTALL_DEVICE seems to be the root device. Are you sure you want to overwrite the current system" || abort "Installation cancelled.";
 fi
 
+# Check if partition is mounted; unmount it if this is the case.
+oos_umount() {
+	# We need to unmount every subpartition this disk has.
+	# e.g. /dev/sdb -> unmount /dev/sdb1, /dev/sdb2, ...
+	mounted_partitions=$(mount -l | grep '/dev/sdb' | awk '{ print $1 }');
+	for (( i=0; i<${#mounted_partitions[@]}; i++ )) do
+		part=${mounted_partitions[$i]};
+		echo "Unmounting $part...";
+
+		# Try for this many times until failing
+		tries=3;
+		for (( h=0; h<=$tries; h++ )) do
+			[ $h == $tries ] && abort "Could not unmount $part!\nPlease ensure that the device is not busy.";
+			umount $part && break;
+			echo "Failed to unmount $part, trying again...";
+			sleep 2;
+		done
+	done
+}
+
+# Unmount the device
+oos_umount $OOS_INSTALL_DEVICE;
+
 # There must be enough space on the disk
 available_space=$(get_available_space "$OOS_INSTALL_DEVICE");
 available_space_human=$(from_bytes $available_space);
