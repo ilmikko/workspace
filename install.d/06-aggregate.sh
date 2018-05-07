@@ -17,5 +17,6 @@ aggregate_variable "OOS_INSTALL_DEVICE";
 
 # aggregate partitions
 aggregate_variable "OOS_PARTITION_LIST";
+OOS_PARTITION_DISK_LABEL_DEFAULT="gpt" && aggregate_variable "OOS_PARTITION_DISK_LABEL";
 
 . $@;

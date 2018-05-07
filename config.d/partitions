@@ -1,5 +1,5 @@
 ROOT:25%:/
-SWAP:8GB:swap
+SWAP:2GB:swap
 BOOT:222MiB:/boot
 HOME:75%:/home
-VAR:12GiB:/var
+VAR:4GiB:/var

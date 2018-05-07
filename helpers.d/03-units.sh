@@ -18,4 +18,8 @@ percentage() {
 	echo $1 $2 | awk -f awk/percentage.awk;
 }
 
+to_percentage() {
+	echo $1 $2 | awk -f awk/to_percentage.awk;
+}
+
 . $@;

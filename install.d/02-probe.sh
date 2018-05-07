@@ -32,5 +32,8 @@ assert_command parted;
 assert_command mount;
 assert_command fdisk;
 assert_command printf;
+assert_command cat;
+assert_command rm;
+assert_command mktemp;
 
 . $@;

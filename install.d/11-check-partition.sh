@@ -4,6 +4,11 @@
 # partitions make sense (e.g. percentages sum up to 100%)
 #
 
+log "Checking partitioning settings...";
+
+# Check that partition table is defined.
+[ -z "$OOS_PARTITION_DISK_LABEL" ] && abort "No partition table type defined! (OOS_PARTITION_DISK_LABEL)";
+
 # Input: a device /dev/* of which space to check.
 get_available_space() {
 	#parted "$1" unit B print 2>/dev/null | awk '/\/dev\/\w+:/ { gsub("B$","",$3); print $3; }';
@@ -15,10 +20,10 @@ get_root_partition() {
 }
 
 pretty_print_partitions() {
-	combined=$1;
+	combined=($@);
 	echo "Partition List:";
 	for (( i=0; i<${#combined[@]}; i++ )) do
-		split=(${combined[$i]//:/ });
+		split=( ${combined[$i]//:/ } );
 		
 		name=${split[0]};
 		bytes=$(from_bytes ${split[1]});
@@ -27,8 +32,6 @@ pretty_print_partitions() {
 		printf "%-12s%-10s%10s\n" $name $mount $bytes;
 	done
 }
-
-log "Checking partitioning settings...";
 
 # Warn if we are writing on /dev/sda (or whichever is the root partition)
 if [[ "$(get_root_partition)" == "$OOS_INSTALL_DEVICE"* ]]; then
@@ -139,7 +142,7 @@ for (( i=0; i<${#relatives[@]}; i++ )) do
 	relatives[$i]=$(join_by ':' ${item[@]});
 done
 
-# TODO: Pretty print the table / re-join the arrays
-combined=("${absolutes[@]}" "${relatives[@]}");
-pretty_print_partitions $combined;
+OOS_PARTITIONS=("${absolutes[@]}" "${relatives[@]}");
+pretty_print_partitions ${OOS_PARTITIONS[@]};
+
 . $@;
