@@ -39,7 +39,7 @@ fi
 oos_umount() {
 	# We need to unmount every subpartition this disk has.
 	# e.g. /dev/sdb -> unmount /dev/sdb1, /dev/sdb2, ...
-	mounted_partitions=$(mount -l | grep '/dev/sdb' | awk '{ print $1 }');
+	mounted_partitions=($(mount -l | grep "$1" | awk '{ print $1 }'));
 	for (( i=0; i<${#mounted_partitions[@]}; i++ )) do
 		part=${mounted_partitions[$i]};
 		echo "Unmounting $part...";
@@ -55,6 +55,7 @@ oos_umount() {
 	done
 }
 
+log "Checking $OOS_INSTALL_DEVICE mount status...";
 # Unmount the device
 oos_umount $OOS_INSTALL_DEVICE;
 
