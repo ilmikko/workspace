@@ -9,6 +9,9 @@
 # 3. Default variables ENV_VAR_DEFAULT
 #
 
+# aggregate installation configs
+aggregate_variable "OOS_FASTTRACK";
+
 # aggregate_variable "ENV_VAR"
 aggregate_variable "OOS_INSTALL_DEVICE";
 
