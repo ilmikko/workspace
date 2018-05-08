@@ -6,6 +6,7 @@ variable_load_file() {
 
 variable_is_file() {
 	# Variable is a callable file if it exists AND starts with ./
+	# TODO: Make this work on POSIX
 	[[ "$1" == "./"* ]] && [ -a "$1" ];
 }
 

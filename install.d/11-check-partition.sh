@@ -13,6 +13,7 @@ join_by() {
 }
 
 is_percentage() {
+	# TODO: Make this work on POSIX
 	[[ $1 == *\% ]];
 }
 
@@ -66,12 +67,15 @@ pretty_print_partitions() {
 }
 
 # Warn if we are writing on /dev/sda (or whichever is the root partition)
+# TODO: Make this work on POSIX
 if [[ "$(get_current_root_partition)" == "$OOS_INSTALL_DEVICE"* ]]; then
 	confirm "$OOS_INSTALL_DEVICE seems to be the root device. Are you sure you want to overwrite the current system" || abort "Installation cancelled.";
 fi
 
 # Check if partition is mounted; unmount it if this is the case.
 oos_umount() {
+	# TODO: Do this faster, and only start warning if it seems like a disk is actually busy (rather than a hierarchical problem)
+	
 	# We need to unmount every subpartition this disk has.
 	# e.g. /dev/sdb -> unmount /dev/sdb1, /dev/sdb2, ...
 	# Because we can have multiple subpartitions inside each other, we need to mount the ones we can first, and loop through until we've unmounted everything.
@@ -81,7 +85,7 @@ oos_umount() {
 		mounted_partitions="${mounted_partitions[@]}";
 
 		# If we have no mounted partitions, break
-		[[ -z "$mounted_partitions" ]] && break;
+		[ -z "$mounted_partitions" ] && break;
 
 		echo Unmounting $mounted_partitions...;
 		# Try to unmount all, some might fail and require another shot.
@@ -119,7 +123,7 @@ for (( i=0; i<${#absolutes[@]}; i++ )) do
 	bytes=$(to_bytes $size);
 
 	# Check that the item size is sane
-	[[ -z "$bytes" ]] || [[ $bytes -lt 1 ]] && abort "Invalid byte size: $size -> $bytes"B;
+	[ -z "$bytes" ] || [ $bytes -lt 1 ] && abort "Invalid byte size: $size -> $bytes"B;
 
 	# update item size
 	item[1]=$bytes;
