@@ -32,7 +32,6 @@ for (( i=0; i<${#partitions[@]}; i++ )) do
 	fs_type=${split[3]};
 
 	# mount and name can be empty, in which case they are ignored
-	
 	if [ -z "$bytes" ] || [ -z "$fs_type" ]; then
 		[ -z "$bytes" ] && abort "Partition ${partitions[$i]} has an empty bytes field!";
 		[ -z "$fs_type" ] && abort "Partition ${partitions[$i]} has an empty filesystem field!";
@@ -48,7 +47,7 @@ get_available_space() {
 	fdisk -l "$1" | awk '/\/dev\/.*:/ { print $5 }';
 }
 
-get_root_partition() {
+get_current_root_partition() {
 	mount | grep 'on / ' | awk '{ print $1 }';
 }
 
@@ -67,7 +66,7 @@ pretty_print_partitions() {
 }
 
 # Warn if we are writing on /dev/sda (or whichever is the root partition)
-if [[ "$(get_root_partition)" == "$OOS_INSTALL_DEVICE"* ]]; then
+if [[ "$(get_current_root_partition)" == "$OOS_INSTALL_DEVICE"* ]]; then
 	confirm "$OOS_INSTALL_DEVICE seems to be the root device. Are you sure you want to overwrite the current system" || abort "Installation cancelled.";
 fi
 

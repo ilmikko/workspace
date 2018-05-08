@@ -106,11 +106,15 @@ oos_create_fs() {
 	esac
 }
 
+oos_created_partitions() {
+	fdisk -l $OOS_INSTALL_DEVICE | awk '/^\/dev/ { print $1 }';
+}
+
 oos_create_filesystems() {
 	device=$1;
 
 	# Get the partitions we just created
-	partitions=($(fdisk -l /dev/sdb | awk '/^\/dev/ { print $1 }'));
+	partitions=($(oos_created_partitions));
 
 	log "Creating filesystems...";
 	for (( ii=0; ii<${#OOS_PARTITIONS[@]}; ii++ )) do
@@ -141,6 +145,4 @@ oos_partition $OOS_INSTALL_DEVICE;
 # Make the filesystems
 oos_create_filesystems $OOS_INSTALL_DEVICE;
 
-# Mount the partitions, create the directory tree
-#oos_mount $OOS_INSTALL_DEVICE;
-
+. $@;

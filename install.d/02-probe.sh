@@ -35,5 +35,7 @@ assert_command printf;
 assert_command cat;
 assert_command rm;
 assert_command mktemp;
+assert_command dirname;
+assert_command basename;
 
 . $@;
