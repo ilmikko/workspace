@@ -74,19 +74,21 @@ fi
 oos_umount() {
 	# We need to unmount every subpartition this disk has.
 	# e.g. /dev/sdb -> unmount /dev/sdb1, /dev/sdb2, ...
-	mounted_partitions=($(mount -l | grep "$1" | awk '{ print $1 }'));
-	for (( i=0; i<${#mounted_partitions[@]}; i++ )) do
-		part=${mounted_partitions[$i]};
-		echo "Unmounting $part...";
+	# Because we can have multiple subpartitions inside each other, we need to mount the ones we can first, and loop through until we've unmounted everything.
+	# This is sort of a hackish solution to do so.
+	while true; do
+		mounted_partitions=($(mount -l | grep "$1" | awk '{ print $1 }'));
+		mounted_partitions="${mounted_partitions[@]}";
 
-		# Try for this many times until failing
-		tries=3;
-		for (( h=0; h<=$tries; h++ )) do
-			[ $h == $tries ] && abort "Could not unmount $part!\nPlease ensure that the device is not busy.";
-			umount $part && break;
-			echo "Failed to unmount $part, trying again...";
-			sleep 2;
-		done
+		# If we have no mounted partitions, break
+		[[ -z "$mounted_partitions" ]] && break;
+
+		echo Unmounting $mounted_partitions...;
+		# Try to unmount all, some might fail and require another shot.
+		umount $mounted_partitions && break;
+
+		warning "Failed to unmount $mounted_partitions, trying again...";
+		sleep 1;
 	done
 }
 
