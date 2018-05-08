@@ -34,7 +34,8 @@ for (( i=0; i<${#partitions[@]}; i++ )) do
 	# mount and name can be empty, in which case they are ignored
 	
 	if [ -z "$bytes" ] || [ -z "$fs_type" ]; then
-		abort "Partition ${partitions[$i]} has empty required fields!";
+		[ -z "$bytes" ] && abort "Partition ${partitions[$i]} has an empty bytes field!";
+		[ -z "$fs_type" ] && abort "Partition ${partitions[$i]} has an empty filesystem field!";
 	fi
 
 	# check if file system is supported
