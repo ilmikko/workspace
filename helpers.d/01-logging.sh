@@ -3,7 +3,7 @@
 # Consistent echo across devices, if possible
 if command -v printf >/dev/null 2>&1; then
 	log(){
-		printf "$@\n";
+		printf "%s\n" "$@";
 	}
 else
 	log(){
