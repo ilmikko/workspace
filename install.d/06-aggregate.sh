@@ -11,6 +11,7 @@
 
 # aggregate installation configs
 aggregate_variable "OOS_FASTTRACK";
+OOS_ERROR_TIMEOUT_DEFAULT=1 && aggregate_variable "OOS_ERROR_TIMEOUT";
 
 # aggregate_variable "ENV_VAR"
 aggregate_variable "OOS_INSTALL_DEVICE";

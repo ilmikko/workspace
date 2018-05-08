@@ -1,6 +1,6 @@
 oos_wipe() {
 	log "Wiping $1...";
-	wipefs -a $1;
+	until wipefs -a $1; do warning "Wiping failed; trying again..."; sleep 1; done;
 }
 
 oos_create_label() {
@@ -9,8 +9,25 @@ oos_create_label() {
 	file=$3;
 
 	debug "Partition table label: $label";
-	# TODO: find a fdisk solution
-	parted $device --script mklabel $label
+	case $label in
+		[Gg][Pp][Tt])
+			key=g;
+			;;
+		[Dd][Oo][Ss]|[Mm][Bb][Rr])
+			key=o;
+			;;
+		[Ss][Uu][Nn])
+			key=s;
+			;;
+		[Ss][Gg][Ii]|[Ii][Rr][Ii][Xx])
+			key=G;
+			;;
+		*)
+			abort "Unknown partition table label: $label";
+			;;
+	esac
+	#parted $device --script mklabel $label || return;
+	echo $key > $file; # Should be the first command, so single > is fine
 }
 
 # Input: size
@@ -61,26 +78,28 @@ oos_partition() {
 		fi
 	done
 
-	oos_partition_execute $device $tempfile;
+	until oos_partition_execute $device $tempfile; do warning "Failed to partition disk, trying again..."; sleep 1; done;
 }
 
 # TODO: There needs to be a sanity check that mkfs.$filesystem exists before we install!
 oos_create_fs() {
-	fs_type=$1;
-	partition=$2;
+	partition=$1;
+	fs_type=$2;
+	label=$3;
+
+	# Unmount and wipe in case there are previous signatures in the partition
+	oos_umount $partition && oos_wipe $partition || return;
 
 	case $fs_type in
 		"fat32")
-			mkfs.fat -F32 $partition;
-			#fatlabel $label;
+			mkfs.fat -F32 $partition && fatlabel $partition $label || return;
 			;;
 		"swap")
-			mkswap $partition;
-			#swaplabel $label;
+			mkswap $partition && swaplabel $partition --label $label || return;
 			;;
-		"ext4"|"ext3"|"ext2")
-			mkfs.$fs_type -F $partition;
-			#e2label $label;
+		"ext"[234])
+			mkfs.$fs_type -F $partition && e2label $partition $label || return;
+			;;
 		*)
 			yes | mkfs.$fs_type $partition;
 			;;
@@ -94,14 +113,16 @@ oos_create_filesystems() {
 	partitions=($(fdisk -l /dev/sdb | awk '/^\/dev/ { print $1 }'));
 
 	log "Creating filesystems...";
-	for (( i=0; i<${#OOS_PARTITIONS[@]}; i++ )) do
-		part=(${OOS_PARTITIONS[$i]//:/ });
+	for (( ii=0; ii<${#OOS_PARTITIONS[@]}; ii++ )) do
+		part=(${OOS_PARTITIONS[$ii]//:/ });
 
 		filesystem=${part[3]};
-		partition=${partitions[$i]};
+		label=${part[0]};
+		partition=${partitions[$ii]};
 
 		debug "Create fs $filesystem on $partition";
-		oos_create_fs $filesystem $partition;
+		# Keep doing until successful
+		until oos_create_fs $partition $filesystem $label; do warning "Filesystem creation on $partition failed; trying again..."; sleep 1; done;
 	done
 }
 
