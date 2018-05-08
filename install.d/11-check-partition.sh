@@ -6,8 +6,40 @@
 
 log "Checking partitioning settings...";
 
+partitions=($OOS_PARTITION_LIST);
+
+join_by() {
+	local IFS="$1"; shift; echo "$*";
+}
+
+is_percentage() {
+	[[ $1 == *\% ]];
+}
+
 # Check that partition table is defined.
 [ -z "$OOS_PARTITION_DISK_LABEL" ] && abort "No partition table type defined! (OOS_PARTITION_DISK_LABEL)";
+
+# Check that partition table is supported
+oos_partlabel_supported $OOS_PARTITION_DISK_LABEL || abort "Partition disk label $OOS_PARTITION_DISK_LABEL is not supported! (OOS_PARTITION_DISK_LABEL)";
+
+# Check that the partitions that the user wants are sane.
+for (( i=0; i<${#partitions[@]}; i++ )) do
+	split=(${partitions[$i]//:/ });
+
+	name=${split[0]};
+	bytes=${split[1]};
+	mount=${split[2]};
+	fs_type=${split[3]};
+
+	# mount and name can be empty, in which case they are ignored
+	
+	if [ -z "$bytes" ] || [ -z "$fs_type" ]; then
+		abort "Partition ${partitions[$i]} has empty required fields!";
+	fi
+
+	# check if file system is supported
+	oos_filesystem_supported $fs_type || abort "Filesystem not supported: $fs_type";
+done
 
 # Input: a device /dev/* of which space to check.
 get_available_space() {
@@ -69,17 +101,6 @@ available_space_human=$(from_bytes $available_space);
 log "There is $available_space_human available on $OOS_INSTALL_DEVICE";
 
 # Take absolute sizes first, check that there is space available
-partitions=$OOS_PARTITION_LIST;
-
-echo ${OOS_PARTITION_LIST[@]}
-
-join_by() {
-	local IFS="$1"; shift; echo "$*";
-}
-
-is_percentage() {
-	[[ $1 == *\% ]];
-}
 
 # Split the array into two (absolutes and relatives) and deal with those.
 absolutes=($(printf "%s\n" ${partitions[@]} | awk -F':' '{ size=$2; if (sub("%$","",size)==0) print $0 }'));
@@ -91,10 +112,15 @@ for (( i=0; i<${#absolutes[@]}; i++ )) do
 	item=(${absolutes[$i]//:/ })
 
 	size=${item[1]};
-	debug "Item size: ${item[1]}";
+	debug "Item size: $size";
+
+	bytes=$(to_bytes $size);
+
+	# Check that the item size is sane
+	[[ -z "$bytes" ]] || [[ $bytes -lt 1 ]] && abort "Invalid byte size: $size -> $bytes"B;
 
 	# update item size
-	item[1]=$(to_bytes $size);
+	item[1]=$bytes;
 
 	# update the partition string
 	# https://stackoverflow.com/questions/1527049/join-elements-of-an-array
@@ -115,7 +141,7 @@ debug "That is: $remaining_space_human";
 
 # If $remaining_space <= 0, (or ridiculously small), abort saying the disk needs more space for the partitions.
 if [ "$remaining_space" -le "0" ]; then
-	abort "The disk needs at least $used_space_human for the installation partitions.\nThere is only $available_space_human available on $OOS_INSTALL_DEVICE.\nPlease either resize your partition preferences or choose a different install device.";
+	abort "The disk needs at least $used_space_human for the installation partitions." "There is only $available_space_human available on $OOS_INSTALL_DEVICE." "Please either resize your partition preferences or choose a different install device.";
 fi
 
 # Check that the percentages add up to 100%
@@ -124,7 +150,7 @@ debug "Percentage sum: $percentage_sum";
 
 # TODO: Convert the percentages to percentages between 0%..100%?
 if [ ! -z "$percentage_sum" ] && [ "$percentage_sum" != 100 ]; then
-	abort "The partition percentages do not sum up to 100%%.\nThey sum up to $percentage_sum%%.\nPlease check your configuration.";
+	abort "The relative partition percentages do not sum up to 100%." "They sum up to $percentage_sum%." "Please check your configuration.";
 fi
 
 # Then, if $remaining_space > 0, convert the percentages to absolute values.

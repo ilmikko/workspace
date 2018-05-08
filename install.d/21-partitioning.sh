@@ -91,13 +91,13 @@ oos_create_fs() {
 	oos_umount $partition && oos_wipe $partition || return;
 
 	case $fs_type in
-		"fat32")
+		[Ff][Aa][Tt]32)
 			mkfs.fat -F32 $partition && fatlabel $partition $label || return;
 			;;
-		"swap")
+		[Ss][Ww][Aa][Pp])
 			mkswap $partition && swaplabel $partition --label $label || return;
 			;;
-		"ext"[234])
+		[Ee][Xx][Tt][234])
 			mkfs.$fs_type -F $partition && e2label $partition $label || return;
 			;;
 		*)
