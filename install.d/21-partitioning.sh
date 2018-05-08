@@ -124,7 +124,13 @@ oos_create_filesystems() {
 		# Keep doing until successful
 		until oos_create_fs $partition $filesystem $label; do warning "Filesystem creation on $partition failed; trying again..."; sleep 1; done;
 	done
-}
+};
+
+if [ "$OOS_USE_PARTITIONING" != 1 ]; then
+	warning "Skipping partitioning step...";
+	. $@;
+	exit;
+fi
 
 # Wipe the device
 oos_wipe $OOS_INSTALL_DEVICE;
