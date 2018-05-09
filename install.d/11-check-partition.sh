@@ -75,6 +75,14 @@ fi
 # Check if partition is mounted; unmount it if this is the case.
 oos_umount() {
 	# TODO: Do this faster, and only start warning if it seems like a disk is actually busy (rather than a hierarchical problem)
+
+	# Unmount swap partitions
+	mounted_swap=($(swapon -s | grep "$1" | awk '{ print $1 }'));
+	mounted_swap="${mounted_swap[@]}";
+	if ! [ -z "$mounted_swap" ]; then
+		log "Unmounting swap $mounted_swap...";
+		swapoff $mounted_swap;
+	fi
 	
 	# We need to unmount every subpartition this disk has.
 	# e.g. /dev/sdb -> unmount /dev/sdb1, /dev/sdb2, ...
