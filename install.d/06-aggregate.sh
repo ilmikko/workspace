@@ -23,4 +23,8 @@ aggregate_variable "OOS_INSTALL_DEVICE";
 aggregate_variable "OOS_PARTITION_LIST";
 OOS_PARTITION_DISK_LABEL_DEFAULT="gpt" && aggregate_variable "OOS_PARTITION_DISK_LABEL";
 
+# packages
+OOS_DEFAULT_PACKAGES_DEFAULT="base base-devel vim dialog wifi-menu" && aggregate_variable "OOS_DEFAULT_PACKAGES_DEFAULT";
+aggregate_variable "OOS_INSTALL_PACKAGES";
+
 . $@;

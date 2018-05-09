@@ -127,7 +127,5 @@ OOS_MOUNT_FOLDER=$(mktemp --directory /tmp/oos_skeleton.XXXXXX);
 # Mount the partitions, creating the directory tree
 oos_mount_all $OOS_INSTALL_DEVICE $OOS_MOUNT_FOLDER;
 
-exit 1;
-
 # Next file
 . $@;
