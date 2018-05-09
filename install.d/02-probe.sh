@@ -18,7 +18,7 @@ case "$OOS_DISTRIBUTION" in
 		debug "Distribution ok";
 		;;
 	*)
-		error "Non-arch installation is currently unsupported. Sorry!\nIf you choose to continue, there is a very high chance things will break.";
+		error "Non-arch installation is currently unsupported. Sorry!" "If you choose to continue, there is a very high chance things will break.";
 		confirm "Are you sure you want to continue" || exit 0;
 		;;
 esac
@@ -38,5 +38,10 @@ assert_command mktemp;
 assert_command dirname;
 assert_command basename;
 assert_command sync;
+
+# These should be able to be installed just for the installation's sake
+# they don't exist on regular machines usually
+assert_command pacstrap;
+assert_command genfstab;
 
 . $@;

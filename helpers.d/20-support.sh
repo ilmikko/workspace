@@ -28,7 +28,7 @@ check_support() {
 # Abort if a given command is not supported.
 assert_command() {
 	if ! command_available "$@"; then
-		abort "Command $@ not supported.\nPlease check your \$PATH, or install the required binaries.";
+		abort "Command $@ not supported." "Please check your \$PATH, or install the required binaries.";
 	fi
 }
 
