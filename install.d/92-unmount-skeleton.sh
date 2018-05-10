@@ -6,10 +6,10 @@
 oos_umount $OOS_INSTALL_DEVICE;
 
 # Sync the device (useful with USB devices)
-log Synchronizing cached writes...;
+log "Synchronizing cached writes...";
 sync;
 
-# Clean up the mount folder
-rmdir $OOS_ROOT_FOLDER;
+# Clean up the mount folder if it was not provided already
+[ -z "$OOS_MOUNT_FOLDER" ] && rmdir $OOS_ROOT_FOLDER;
 
 . $@;
