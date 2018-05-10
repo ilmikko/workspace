@@ -5,8 +5,10 @@
 
 log "Getting system information...";
 OOS_DISTRIBUTION=$(distribution);
+OOS_ARCH=$(arch);
 
 debug "OOS_SHELL=$OOS_SHELL";
+debug "OOS_ARCH=$OOS_ARCH";
 debug "OOS_INSTALL_DEVICE=$OOS_INSTALL_DEVICE";
 debug "OOS_DISTRIBUTION=$OOS_DISTRIBUTION";
 
@@ -23,25 +25,13 @@ case "$OOS_DISTRIBUTION" in
 		;;
 esac
 
-# TODO: I'm not sure where these should go as of now
-log "Command check...";
-
-assert_command awk;
-assert_command sudo;
-assert_command parted;
-assert_command mount;
-assert_command fdisk;
-assert_command printf;
-assert_command cat;
-assert_command rm;
-assert_command mktemp;
-assert_command dirname;
-assert_command basename;
-assert_command sync;
-
-# These should be able to be installed just for the installation's sake
-# they don't exist on regular machines usually
-assert_command pacstrap;
-assert_command genfstab;
+case "$OOS_ARCH" in
+	[Xx]86-64)
+		debug "Architecture ok";
+		;;
+	*)
+		error "Your architecture ($OOS_ARCH) is unsupported. Sorry!" "You can still choose to continue, but the script might break.";
+		confirm "Are you sure you want to continue" || exit 0;
+esac
 
 . $@;

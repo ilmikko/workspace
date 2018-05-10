@@ -21,4 +21,9 @@ distribution() {
 	echo "unknown";
 }
 
+# Architecture
+arch() {
+	uname -m;
+}
+
 . $@;

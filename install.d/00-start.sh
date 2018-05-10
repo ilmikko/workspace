@@ -11,5 +11,26 @@ if ! shell_supported $OOS_SHELL; then
 	warning "Shell $OOS_SHELL is not supported.\nThe installation may misbehave.";
 fi
 
+log "Command check...";
+
+assert_command awk;
+assert_command sudo;
+assert_command parted;
+assert_command mount;
+assert_command fdisk;
+assert_command printf;
+assert_command cat;
+assert_command rm;
+assert_command mktemp;
+assert_command dirname;
+assert_command basename;
+assert_command sync;
+assert_command uname;
+
+# These should be able to be installed just for the installation's sake
+# they don't exist on regular machines usually
+assert_command pacstrap;
+assert_command genfstab;
+
 # Next file
 . $@;
