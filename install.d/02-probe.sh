@@ -26,7 +26,7 @@ case "$OOS_DISTRIBUTION" in
 esac
 
 case "$OOS_ARCH" in
-	[Xx]86-64)
+	[Xx]86_64)
 		debug "Architecture ok";
 		;;
 	*)
