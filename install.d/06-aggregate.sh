@@ -33,5 +33,6 @@ OOS_HOSTNAME_DEFAULT="Installation $(date "+%Y-%M-%d")" && aggregate_variable "O
 # locale
 OOS_LANG_DEFAULT="en_US.UTF-8" && aggregate_variable "OOS_LANG";
 OOS_LOCALE_DEFAULT="en_US" && aggregate_variable "OOS_LOCALE";
+OOS_TIMEZONE_DEFAULT="UTC" && aggregate_variable "OOS_TIMEZONE";
 
 . $@;

@@ -55,6 +55,11 @@ oos_set_locale() {
 	debug "locale.conf...";
 	echo LOCALE=${OOS_LOCALE[0]} > $1/etc/locale.conf;
 	echo LANG=$OOS_LANG >> $1/etc/locale.conf;
+
+	# Timezone
+	# (might have to do this on the other side, phase 3, as hard links should not be done at this time)
+	# ln -sf $1/usr/share/zoneinfo/$OOS_TIMEZONE $1/etc/localtime;
+	# hwclock --systohc
 }
 
 # Pacstrap the mount folder
