@@ -132,7 +132,7 @@ fi
 [ -z "$OOS_ROOT_FOLDER" ] || [ "$OOS_ROOT_FOLDER" = / ] && abort "Tried to mount on root folder!";
 
 # Mount the partitions, creating the directory tree
-oos_mount_all $OOS_INSTALL_DEVICE $OOS_ROOT_FOLDER;
+[ "$OOS_USE_REMOUNT" = 1 ] && oos_mount_all $OOS_INSTALL_DEVICE $OOS_ROOT_FOLDER;
 
 # Next file
 . $@;
