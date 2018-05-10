@@ -29,14 +29,23 @@ aggregate_variable "OOS_INSTALL_DEVICE";
 aggregate_variable "OOS_PARTITION_LIST";
 OOS_PARTITION_DISK_LABEL_DEFAULT="gpt" && aggregate_variable "OOS_PARTITION_DISK_LABEL";
 
-# packages
-OOS_DEFAULT_PACKAGES_DEFAULT="base vim" && aggregate_variable "OOS_DEFAULT_PACKAGES";
+# Booting
+# boot into UEFI by default
+OOS_BOOT_UEFI_DEFAULT=1 && aggregate_variable "OOS_BOOT_UEFI";
+
+# Packages
 
 # install grub if using grub
-[ "$OOS_USE_GRUB" = 1 ] && OOS_ADDITIONAL_PACKAGES_DEFAULT="grub";
+[ "$OOS_USE_GRUB" = 1 ] && OOS_ADDITIONAL_PACKAGES_DEFAULT=($OOS_ADDITIONAL_PACKAGES_DEFAULT grub);
+# install efibootmgr if using UEFI
+[ "$OOS_BOOT_UEFI" = 1 ] && OOS_ADDITIONAL_PACKAGES_DEFAULT=($OOS_ADDITIONAL_PACKAGES_DEFAULT efibootmgr);
+
+OOS_ADDITIONAL_PACKAGES_DEFAULT=${OOS_ADDITIONAL_PACKAGES_DEFAULT[@]};
 aggregate_variable "OOS_ADDITIONAL_PACKAGES";
 
 aggregate_variable "OOS_INSTALL_PACKAGES";
+
+OOS_DEFAULT_PACKAGES_DEFAULT="base vim" && aggregate_variable "OOS_DEFAULT_PACKAGES";
 
 # hosts
 OOS_HOSTNAME_DEFAULT="Installation $(date "+%Y-%M-%d")" && aggregate_variable "OOS_HOSTNAME";

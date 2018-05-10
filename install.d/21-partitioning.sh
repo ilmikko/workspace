@@ -32,6 +32,7 @@ oos_create_label() {
 
 # Input: size
 oos_create_partition() {
+	# TODO: When OOS_BOOT_UEFI is false, we need to set the BOOT partition to BIOS BOOT partition, or set its type to 4.
 	file=$1;
 	size=$2;
 	(
