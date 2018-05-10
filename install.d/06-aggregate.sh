@@ -15,6 +15,7 @@ OOS_ERROR_TIMEOUT_DEFAULT=1 && aggregate_variable "OOS_ERROR_TIMEOUT";
 
 # Installation steps
 OOS_USE_PARTITIONING_DEFAULT=1 && aggregate_variable "OOS_USE_PARTITIONING";
+OOS_USE_PACSTRAP_DEFAULT=1 && aggregate_variable "OOS_USE_PACSTRAP";
 
 # aggregate_variable "ENV_VAR"
 aggregate_variable "OOS_INSTALL_DEVICE";

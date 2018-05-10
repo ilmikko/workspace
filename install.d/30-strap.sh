@@ -63,7 +63,11 @@ oos_set_locale() {
 }
 
 # Pacstrap the mount folder
-oos_pacstrap $OOS_MOUNT_FOLDER;
+if [ "$OOS_USE_PACSTRAP" = 1 ]; then
+	oos_pacstrap $OOS_MOUNT_FOLDER;
+else
+	warning "Skipping pacstrap step...";
+fi
 
 # Generate the fstab file
 oos_genfstab $OOS_MOUNT_FOLDER;
