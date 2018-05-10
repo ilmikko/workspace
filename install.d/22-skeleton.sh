@@ -121,11 +121,18 @@ fi
 
 log "Creating file structure skeleton...";
 
-# Make a temporary folder for the files to reside in
-OOS_MOUNT_FOLDER=$(mktemp --directory /tmp/oos_skeleton.XXXXXX);
+if [ -z "$OOS_MOUNT_FOLDER" ]; then
+	# Make a temporary folder for the files to reside in
+	OOS_ROOT_FOLDER=$(mktemp --directory /tmp/oos_mount_folder.XXXXXX);
+else
+	OOS_ROOT_FOLDER=$OOS_MOUNT_FOLDER;
+fi
+
+# Make sure we are not mounting on root
+[ -z "$OOS_ROOT_FOLDER" ] || [ "$OOS_ROOT_FOLDER" = / ] && abort "Tried to mount on root folder!";
 
 # Mount the partitions, creating the directory tree
-oos_mount_all $OOS_INSTALL_DEVICE $OOS_MOUNT_FOLDER;
+oos_mount_all $OOS_INSTALL_DEVICE $OOS_ROOT_FOLDER;
 
 # Next file
 . $@;

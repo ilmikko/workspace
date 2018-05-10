@@ -64,19 +64,19 @@ oos_set_locale() {
 
 # Pacstrap the mount folder
 if [ "$OOS_USE_PACSTRAP" = 1 ]; then
-	oos_pacstrap $OOS_MOUNT_FOLDER;
+	oos_pacstrap $OOS_ROOT_FOLDER;
 else
 	warning "Skipping pacstrap step...";
 fi
 
 # Generate the fstab file
-oos_genfstab $OOS_MOUNT_FOLDER;
+oos_genfstab $OOS_ROOT_FOLDER;
 
 # Set the hostname and /etc/hosts
-oos_set_hosts $OOS_MOUNT_FOLDER;
+oos_set_hosts $OOS_ROOT_FOLDER;
 
 # Set the time and locale settings
-oos_set_locale $OOS_MOUNT_FOLDER;
+oos_set_locale $OOS_ROOT_FOLDER;
 
 exit 1;
 
