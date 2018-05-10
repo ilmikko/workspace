@@ -78,7 +78,5 @@ oos_set_hosts $OOS_ROOT_FOLDER;
 # Set the time and locale settings
 oos_set_locale $OOS_ROOT_FOLDER;
 
-exit 1;
-
 # next file
 . $@;

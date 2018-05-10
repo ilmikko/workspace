@@ -23,7 +23,4 @@ fi
 # Install device must make sense (TODO: Make this overrideable)
 [[ "$OOS_INSTALL_DEVICE" != /dev/* ]] && abort "Cannot install on unknown device type: $OOS_INSTALL_DEVICE";
 
-# Mount folder should exist if it is defined (otherwise we'll use temp)
-[ ! -z "$OOS_MOUNT_FOLDER" ] && [ ! -d "$OOS_MOUNT_FOLDER" ] && abort "Mount folder does not exist, or is not a folder." "Please ensure $OOS_MOUNT_FOLDER exists and is a writeable directory.";
-
 . $@;
