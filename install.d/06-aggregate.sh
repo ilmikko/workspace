@@ -20,6 +20,8 @@ OOS_USE_PARTITIONING_DEFAULT=1 && aggregate_variable "OOS_USE_PARTITIONING";
 OOS_USE_REMOUNT_DEFAULT=1 && aggregate_variable "OOS_USE_REMOUNT";
 OOS_USE_PACSTRAP_DEFAULT=1 && aggregate_variable "OOS_USE_PACSTRAP";
 
+OOS_USE_GRUB_DEFAULT=1 && aggregate_variable "OOS_USE_GRUB";
+
 # aggregate_variable "ENV_VAR"
 aggregate_variable "OOS_INSTALL_DEVICE";
 
@@ -28,7 +30,12 @@ aggregate_variable "OOS_PARTITION_LIST";
 OOS_PARTITION_DISK_LABEL_DEFAULT="gpt" && aggregate_variable "OOS_PARTITION_DISK_LABEL";
 
 # packages
-OOS_DEFAULT_PACKAGES_DEFAULT="base base-devel vim dialog wifi-menu" && aggregate_variable "OOS_DEFAULT_PACKAGES_DEFAULT";
+OOS_DEFAULT_PACKAGES_DEFAULT="base vim" && aggregate_variable "OOS_DEFAULT_PACKAGES";
+
+# install grub if using grub
+[ "$OOS_USE_GRUB" = 1 ] && OOS_ADDITIONAL_PACKAGES_DEFAULT="grub";
+aggregate_variable "OOS_ADDITIONAL_PACKAGES";
+
 aggregate_variable "OOS_INSTALL_PACKAGES";
 
 # hosts

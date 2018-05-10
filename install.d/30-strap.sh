@@ -5,7 +5,7 @@
 
 oos_pacstrap() {
 	# TODO: Can we do this without pacstrap, using pacman -r ?
-	until pacstrap $1 $OOS_DEFAULT_PACKAGES; do
+	until pacstrap $1 $OOS_DEFAULT_PACKAGES $OOS_ADDITIONAL_PACKAGES; do
 		warning "Pacstrap failed to install some packages; trying again...";
 		sleep 1;
 	done
