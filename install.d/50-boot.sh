@@ -16,7 +16,7 @@ if [ "$OOS_USE_GRUB" = 1 ]; then
 		if [ "$OOS_BOOT_UEFI" = 1 ]; then
 			# UEFI path
 			log "Installing grub on $OOS_INSTALL_DEVICE... (UEFI)";
-			arch-chroot $1 grub-install --target=$OOS_ARCH-efi --efi-directory=/boot --bootloader-id=OrciOS $OOS_INSTALL_DEVICE || abort "Error while installing grub!";
+			arch-chroot $1 grub-install --target=$OOS_ARCH-efi --efi-directory=/boot --bootloader-id="$OOS_BOOT_ID" $OOS_INSTALL_DEVICE || abort "Error while installing grub!";
 		else
 			# BIOS path
 			log "Installing grub on $OOS_INSTALL_DEVICE... (BIOS)";

@@ -27,6 +27,9 @@ OOS_USE_GRUB_DEFAULT=1 && aggregate_variable "OOS_USE_GRUB";
 
 OOS_UNMOUNT_AFTER_INSTALL_DEFAULT=1 && aggregate_variable "OOS_UNMOUNT_AFTER_INSTALL";
 
+# Customization
+OOS_INSTALL_NAME_DEFAULT="OOS-$(date "+%Y%M%d")" && aggregate_variable "OOS_INSTALL_NAME";
+
 # aggregate_variable "ENV_VAR"
 aggregate_variable "OOS_INSTALL_DEVICE";
 
@@ -37,6 +40,8 @@ OOS_PARTITION_DISK_LABEL_DEFAULT="gpt" && aggregate_variable "OOS_PARTITION_DISK
 # Booting
 # boot into UEFI by default
 OOS_BOOT_UEFI_DEFAULT=1 && aggregate_variable "OOS_BOOT_UEFI";
+
+OOS_BOOT_ID_DEFAULT=$OOS_INSTALL_NAME && aggregate_variable "OOS_BOOT_ID";
 
 # Packages
 
@@ -53,7 +58,7 @@ aggregate_variable "OOS_INSTALL_PACKAGES";
 OOS_DEFAULT_PACKAGES_DEFAULT="base vim" && aggregate_variable "OOS_DEFAULT_PACKAGES";
 
 # hosts
-OOS_HOSTNAME_DEFAULT="OOS-$(date "+%Y-%M-%d")" && aggregate_variable "OOS_HOSTNAME";
+OOS_HOSTNAME_DEFAULT=$OOS_INSTALL_NAME && aggregate_variable "OOS_HOSTNAME";
 
 # locale
 OOS_LANG_DEFAULT="en_US.UTF-8" && aggregate_variable "OOS_LANG";
