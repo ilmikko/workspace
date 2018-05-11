@@ -3,6 +3,6 @@
 log "Stage 2 finished successfully";
 log "Rebooting...";
 
-reboot;
+[ "$OOS_USE_REBOOT" = 1 ] && reboot;
 
 exit;

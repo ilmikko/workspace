@@ -19,6 +19,7 @@ aggregate_variable "OOS_MOUNT_FOLDER";
 OOS_USE_PARTITIONING_DEFAULT=1 && aggregate_variable "OOS_USE_PARTITIONING";
 OOS_USE_REMOUNT_DEFAULT=1 && aggregate_variable "OOS_USE_REMOUNT";
 OOS_USE_PACSTRAP_DEFAULT=1 && aggregate_variable "OOS_USE_PACSTRAP";
+OOS_USE_REBOOT_DEFAULT=1 && aggregate_variable "OOS_USE_REBOOT";
 
 OOS_USE_GRUB_DEFAULT=1 && aggregate_variable "OOS_USE_GRUB";
 
