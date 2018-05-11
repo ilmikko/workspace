@@ -15,6 +15,4 @@ for skeleton in skel.d/*; do
 	cp -rv $skeleton/* $OOS_ROOT_FOLDER;
 done
 
-exit 1;
-
 . $@;
