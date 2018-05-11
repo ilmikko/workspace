@@ -26,6 +26,10 @@ if [ "$OOS_USE_GRUB" = 1 ]; then
 
 		# Grub config
 		log "Configuring grub...";
+		
+		# Change the distributor to whatever name we have stated
+		cat $1/etc/default/grub | sed 's/^GRUB_DISTRIBUTOR=.*$/GRUB_DISTRIBUTOR="'$OOS_INSTALL_NAME'"/' > $1/etc/default/grub;
+
 		arch-chroot $1 grub-mkconfig -o /boot/grub/grub.cfg;
 	}
 else

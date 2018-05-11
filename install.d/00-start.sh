@@ -26,6 +26,7 @@ assert_command dirname;
 assert_command basename;
 assert_command sync;
 assert_command uname;
+assert_command sed;
 
 # These should be able to be installed just for the installation's sake
 # they don't exist on regular machines usually
