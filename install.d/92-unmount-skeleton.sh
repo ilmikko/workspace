@@ -3,7 +3,7 @@
 #
 
 # Unmount the device when finished
-oos_umount $OOS_INSTALL_DEVICE;
+[ "$OOS_UNMOUNT_AFTER_INSTALL" = 1 ] && oos_umount $OOS_INSTALL_DEVICE;
 
 # Sync the device (useful with USB devices)
 log "Synchronizing cached writes...";

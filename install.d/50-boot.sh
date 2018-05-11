@@ -3,6 +3,12 @@
 # Install either UEFI/BIOS bootloader (grub) and prepare the system for reboot
 #
 
+if [ "$OOS_USE_BOOTLOADER" != 1 ]; then
+	warning "Skipping boot step...";
+	. $@;
+	exit;
+fi
+
 if [ "$OOS_USE_GRUB" = 1 ]; then
 	oos_install_bootloader() {
 		log "Installing bootloader...";

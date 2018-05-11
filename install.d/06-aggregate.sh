@@ -18,10 +18,14 @@ aggregate_variable "OOS_MOUNT_FOLDER";
 # Installation steps
 OOS_USE_PARTITIONING_DEFAULT=1 && aggregate_variable "OOS_USE_PARTITIONING";
 OOS_USE_REMOUNT_DEFAULT=1 && aggregate_variable "OOS_USE_REMOUNT";
-OOS_USE_PACSTRAP_DEFAULT=1 && aggregate_variable "OOS_USE_PACSTRAP";
+OOS_USE_STRAP_DEFAULT=1 && aggregate_variable "OOS_USE_STRAP";
 OOS_USE_REBOOT_DEFAULT=1 && aggregate_variable "OOS_USE_REBOOT";
+OOS_USE_BOOTLOADER_DEFAULT=1 && aggregate_variable "OOS_USE_BOOTLOADER";
 
+OOS_USE_PACSTRAP_DEFAULT=1 && aggregate_variable "OOS_USE_PACSTRAP";
 OOS_USE_GRUB_DEFAULT=1 && aggregate_variable "OOS_USE_GRUB";
+
+OOS_UNMOUNT_AFTER_INSTALL_DEFAULT=1 && aggregate_variable "OOS_UNMOUNT_AFTER_INSTALL";
 
 # aggregate_variable "ENV_VAR"
 aggregate_variable "OOS_INSTALL_DEVICE";
@@ -49,7 +53,7 @@ aggregate_variable "OOS_INSTALL_PACKAGES";
 OOS_DEFAULT_PACKAGES_DEFAULT="base vim" && aggregate_variable "OOS_DEFAULT_PACKAGES";
 
 # hosts
-OOS_HOSTNAME_DEFAULT="Installation $(date "+%Y-%M-%d")" && aggregate_variable "OOS_HOSTNAME";
+OOS_HOSTNAME_DEFAULT="OOS-$(date "+%Y-%M-%d")" && aggregate_variable "OOS_HOSTNAME";
 
 # locale
 OOS_LANG_DEFAULT="en_US.UTF-8" && aggregate_variable "OOS_LANG";

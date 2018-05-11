@@ -62,6 +62,12 @@ oos_set_locale() {
 	# hwclock --systohc
 }
 
+if [ "$OOS_USE_STRAP" != 1 ]; then
+	warning "Skipping strap step...";
+	. $@;
+	exit;
+fi
+
 # Pacstrap the mount folder
 if [ "$OOS_USE_PACSTRAP" = 1 ]; then
 	oos_pacstrap $OOS_ROOT_FOLDER;
