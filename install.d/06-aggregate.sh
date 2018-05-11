@@ -19,6 +19,7 @@ aggregate_variable "OOS_MOUNT_FOLDER";
 OOS_USE_PARTITIONING_DEFAULT=1 && aggregate_variable "OOS_USE_PARTITIONING";
 OOS_USE_REMOUNT_DEFAULT=1 && aggregate_variable "OOS_USE_REMOUNT";
 OOS_USE_STRAP_DEFAULT=1 && aggregate_variable "OOS_USE_STRAP";
+OOS_USE_SKELETON_DEFAULT=1 && aggregate_variable "OOS_USE_SKELETON";
 OOS_USE_REBOOT_DEFAULT=1 && aggregate_variable "OOS_USE_REBOOT";
 OOS_USE_BOOTLOADER_DEFAULT=1 && aggregate_variable "OOS_USE_BOOTLOADER";
 
