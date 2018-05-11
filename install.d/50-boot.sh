@@ -36,7 +36,7 @@ oos_mkinitcpio() {
 	arch-chroot $1 mkinitcpio -p linux;
 }
 
-#oos_install_bootloader $OOS_ROOT_FOLDER;
+oos_install_bootloader $OOS_ROOT_FOLDER;
 
 oos_mkinitcpio $OOS_ROOT_FOLDER;
 
