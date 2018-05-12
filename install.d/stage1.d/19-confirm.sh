@@ -26,8 +26,14 @@ fi
 
 if [ "$confirmation" = "YES" ]; then
 	log "Starting installation... you might want to grab a cup of tea now.";
-	# Next file, after confirmation
-	. $@;
+	# Move to stage 2
+
+	# Write the installation configuration file for the next stages, or to fast track if it fails
+	
+	
+	# Tell the script it's now stage 2
+	touch stage2;
+	exit;
 else
 	# TODO: Exit more gracefully, prompt again or alternatively save the config and fast track
 	# here if the config is detected to be done already.
