@@ -33,4 +33,10 @@ assert_command() {
 	fi
 }
 
+assert_commands() {
+	for command in $@; do
+		assert_command $command;
+	done
+}
+
 . $@;

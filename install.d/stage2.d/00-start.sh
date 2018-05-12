@@ -14,26 +14,12 @@ fi
 
 log "Command check...";
 
-assert_command awk;
-assert_command sudo;
-assert_command parted;
-assert_command mount;
-assert_command fdisk;
-assert_command printf;
-assert_command cat;
-assert_command rm;
-assert_command cp;
-assert_command mktemp;
-assert_command dirname;
-assert_command basename;
-assert_command sync;
-assert_command uname;
-assert_command sed;
+# These commands are needed for stage 2
+assert_commands awk sudo parted mount fdisk printf cat rm cp mktemp dirname basename sync uname sed;
 
 # These should be able to be installed just for the installation's sake
 # they don't exist on regular machines usually
-assert_command pacstrap;
-assert_command genfstab;
+assert_commands pacstrap genfstab;
 
 # Next file
 . $@;
