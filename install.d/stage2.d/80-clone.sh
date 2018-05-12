@@ -9,6 +9,8 @@ OOS_CLONE_FOLDER=/root;
 # TODO: Do we need to clone stage 1 and 2 for this?
 log "Copying installation over...";
 cp -rv ./* $OOS_ROOT_FOLDER/$OOS_CLONE_FOLDER;
+# Make the script know it's in stage 3
+touch $OOS_ROOT_FOLDER/$OOS_CLONE_FOLDER/stage3;
 
 # Make the installation autologin into stage 3
 log "Configuring first time setup...";
