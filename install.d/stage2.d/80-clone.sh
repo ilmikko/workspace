@@ -9,14 +9,23 @@ OOS_CLONE_FOLDER=/root;
 # TODO: Do we need to clone stage 1 and 2 for this?
 log "Copying installation over...";
 cp -rv ./* $OOS_ROOT_FOLDER/$OOS_CLONE_FOLDER;
+
 # Make the script know it's in stage 3
 touch $OOS_ROOT_FOLDER/$OOS_CLONE_FOLDER/stage3;
 
-# Make the installation autologin into stage 3
-log "Configuring first time setup...";
 getty_folder=/etc/systemd/system/getty@tty1.service.d/;
+
+# Make the installation autologin into root
+log "Configuring first time setup...";
+debug "Service files";
 mkdir -p $OOS_ROOT_FOLDER/$getty_folder/;
-echo "[Service]" > $OOS_ROOT_FOLDER/$getty_folder/override.conf;
-echo "ExecStart=-/usr/bin/bash /$OOS_CLONE_FOLDER/$0" >> $OOS_ROOT_FOLDER/$getty_folder/override.conf;
+file=$OOS_ROOT_FOLDER/$getty_folder/override.conf;
+echo "[Service]" > $file;
+echo "ExecStart=" >> $file;
+echo "ExecStart=-/usr/bin/agetty --autologin root --noclear %I $TERM" >> $file;
+
+debug "Root login file";
+# Make root automatically run stage 3
+echo "bash $OOS_ROOT_FOLDER/$OOS_CLONE_FOLDER/install.sh" > $OOS_ROOT_FOLDER/root/.bashrc;
 
 . $@;
