@@ -11,14 +11,10 @@ log "Checking environment variables...";
 
 # OOS_INSTALL_DEVICE
 # Install device must be set
-if [ "x$OOS_INSTALL_DEVICE" = "x" ]; then
-	abort "OOS_INSTALL_DEVICE not set.";
-fi
+[ -z "$OOS_INSTALL_DEVICE" ] && abort "OOS_INSTALL_DEVICE not set.";
 
 # Install device must exist
-if ! [ -a "$OOS_INSTALL_DEVICE" ]; then
-	abort "Device $OOS_INSTALL_DEVICE does not exist.";
-fi
+[ -a "$OOS_INSTALL_DEVICE" ] || abort "Device $OOS_INSTALL_DEVICE does not exist.";
 
 # Install device must make sense (TODO: Make this overrideable)
 [[ "$OOS_INSTALL_DEVICE" != /dev/* ]] && abort "Cannot install on unknown device type: $OOS_INSTALL_DEVICE";

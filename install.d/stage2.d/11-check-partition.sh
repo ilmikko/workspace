@@ -54,7 +54,6 @@ get_current_root_partition() {
 
 pretty_print_partitions() {
 	combined=($@);
-	echo "Partition List:";
 	for (( i=0; i<${#combined[@]}; i++ )) do
 		split=( ${combined[$i]//:/ } );
 		
@@ -183,6 +182,5 @@ for (( i=0; i<${#relatives[@]}; i++ )) do
 done
 
 OOS_PARTITIONS=("${absolutes[@]}" "${relatives[@]}");
-pretty_print_partitions ${OOS_PARTITIONS[@]};
 
 . $@;

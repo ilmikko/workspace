@@ -9,6 +9,11 @@ log "             Please make sure the following information is correct.";
 log "================================================================================";
 log;
 log "Installation device: $OOS_INSTALL_DEVICE";
+log "Installation packages: $OOS_INSTALL_PACKAGES $OOS_DEFAULT_PACKAGES $OOS_ADDITIONAL_PACKAGES";
+log "Installation name: $OOS_INSTALL_NAME";
+log;
+log "Partitions:";
+pretty_print_partitions ${OOS_PARTITIONS[@]};
 log;
 log "You are about to install a new linux workspace on $OOS_INSTALL_DEVICE.";
 log "Please type in uppercase YES to begin the installation process.";
@@ -29,4 +34,3 @@ else
 	log "Installation aborted.";
 	exit 1;
 fi
-
