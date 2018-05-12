@@ -3,6 +3,8 @@
 # Probes some system information that is useful during the installation process.
 #
 
+# TODO: Maybe not needed in 2..3, stage 1?
+
 log "Getting system information...";
 OOS_DISTRIBUTION=$(distribution);
 OOS_ARCH=$(arch);

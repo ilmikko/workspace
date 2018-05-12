@@ -9,6 +9,9 @@
 # 3. Default variables ENV_VAR_DEFAULT
 #
 
+# TODO: This should not be needed in stages 2..3
+
+
 # aggregate installation configs
 aggregate_variable "OOS_FASTTRACK";
 OOS_ERROR_TIMEOUT_DEFAULT=1 && aggregate_variable "OOS_ERROR_TIMEOUT";

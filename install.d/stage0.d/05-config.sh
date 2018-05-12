@@ -3,11 +3,13 @@
 # The config will be saved into a file and dragged across as needed.
 # The idea is to only ask the user once so that no one has to babysit the installation process.
 
+# TODO: On stage 2..3, we only need to source $OOS_INSTALL_CONF_LOCATION and we're good to go
+
 # An option to fast track if the config file is found already
 log;
 if [ -f "$OOS_INSTALL_CONF_PATH" ]; then
 	log "The configuration file was found in $(realpath "$OOS_INSTALL_CONF_PATH").";
-	if assume "Do you want to use this file"; then
+	if [ -a "stage2" ] || assume "Do you want to use this file"; then
 		# Load the config file
 		. "$OOS_INSTALL_CONF_PATH";
 		

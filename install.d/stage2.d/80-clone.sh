@@ -26,6 +26,6 @@ echo "ExecStart=-/usr/bin/agetty --autologin root --noclear %I $TERM" >> $file;
 
 debug "Root login file";
 # Make root automatically run stage 3
-echo "bash $OOS_ROOT_FOLDER/$OOS_CLONE_FOLDER/install.sh" > $OOS_ROOT_FOLDER/root/.profile;
+echo "bash /$OOS_CLONE_FOLDER/install.sh" > $OOS_ROOT_FOLDER/root/.profile;
 
 . $@;
