@@ -18,6 +18,7 @@ shell_supported() {
 }
 
 # Check that every command we use is supported.
+# TODO: Proper checking per stage
 check_support() {
 	assert_command readlink;
 	assert_command dirname;

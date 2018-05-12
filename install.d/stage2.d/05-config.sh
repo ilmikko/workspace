@@ -5,11 +5,11 @@
 
 # An option to fast track if the config file is found already
 log;
-if [ -f "./install.conf" ]; then
-	log "The configuration file was found in $(realpath ./install.conf).";
+if [ -f "$OOS_INSTALL_CONF_PATH" ]; then
+	log "The configuration file was found in $(realpath "$OOS_INSTALL_CONF_PATH").";
 	if assume "Do you want to use this file"; then
 		# Load the config file
-		. ./install.conf;
+		. "$OOS_INSTALL_CONF_PATH";
 		
 		# Go to next file
 		. $@;

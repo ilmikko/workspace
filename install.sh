@@ -14,6 +14,12 @@ echo "Preparing...";
 
 LANG=C
 
+OOS_INSTALL_PATH=./install.d/;
+OOS_AWK_PATH=$OOS_INSTALL_PATH/awk.d/;
+OOS_HELPER_PATH=$OOS_INSTALL_PATH/helpers.d/;
+OOS_INSTALL_CONF_PATH=./install.conf;
+OOS_SKELETON_PATH=./skel.d/;
+
 fatal_error(){
 	echo "Fatal error: The installation cannot continue.";
 	echo "$@";
@@ -69,7 +75,7 @@ fi
 cd $(dirname $0);
 
 # Get the helpers
-. ./helpers.d/*;
+. $OOS_HELPER_PATH/*;
 
 # Test that the helpers are loaded and sane
 if ! sane; then
@@ -77,16 +83,5 @@ if ! sane; then
 	exit 2;
 fi
 
-# Check that we have all the prerequisite binaries
-check_support;
-
-# Check if arguments were provided.
-if [ -z "$1" ]; then
-	debug "Initializing...";
-
-	# Call the rest of our scripts in order.
-	. ./install.d/*;
-else
-	# Fast track to arguments
-	. $@;
-fi
+# Get stage 0 which determines which stage we should go on
+. $OOS_INSTALL_PATH/stage0.d/*;
