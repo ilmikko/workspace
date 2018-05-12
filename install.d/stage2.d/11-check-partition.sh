@@ -176,7 +176,7 @@ for (( i=0; i<${#relatives[@]}; i++ )) do
 	echo "Item size: ${item[1]}";
 
 	# update item size
-	item[1]=$(echo $size $remaining_space | awk -f awk/percentage.awk);
+	item[1]=$(from_percentage $size $remaining_space);
 
 	# update the partition string
 	relatives[$i]=$(join_by ':' ${item[@]});

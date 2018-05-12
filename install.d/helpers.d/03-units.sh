@@ -14,8 +14,8 @@ from_bytes() {
 }
 
 # Get percentage of a value
-percentage() {
-	echo $1 $2 | awk -f $OOS_AWK_PATH/percentage.awk;
+from_percentage() {
+	echo $1 $2 | awk -f $OOS_AWK_PATH/from_percentage.awk;
 }
 
 to_percentage() {
