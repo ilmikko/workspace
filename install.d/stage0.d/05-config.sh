@@ -6,9 +6,8 @@
 # TODO: On stage 2..3, we only need to source $OOS_INSTALL_CONF_LOCATION and we're good to go
 
 # An option to fast track if the config file is found already
-log;
 if [ -f "$OOS_INSTALL_CONF_PATH" ]; then
-	log "The configuration file was found in $(realpath "$OOS_INSTALL_CONF_PATH").";
+	log "The install file was found in $(realpath "$OOS_INSTALL_CONF_PATH").";
 	if [ -a "stage2" ] || assume "Do you want to use this file"; then
 		# Load the config file
 		. "$OOS_INSTALL_CONF_PATH";
@@ -18,10 +17,6 @@ if [ -f "$OOS_INSTALL_CONF_PATH" ]; then
 		exit;
 	fi
 fi
-
-log "Please configure the installation below.";
-# TODO: More configuration options
-read;
 
 # Next file
 . $@;

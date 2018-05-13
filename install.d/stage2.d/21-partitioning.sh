@@ -137,6 +137,9 @@ if [ "$OOS_USE_PARTITIONING" != 1 ]; then
 	exit;
 fi
 
+# Unmount the device
+oos_umount $OOS_INSTALL_DEVICE;
+
 # Wipe the device
 oos_wipe $OOS_INSTALL_DEVICE;
 
@@ -145,5 +148,7 @@ oos_partition $OOS_INSTALL_DEVICE;
 
 # Make the filesystems
 oos_create_filesystems $OOS_INSTALL_DEVICE;
+
+sleep 100;
 
 . $@;

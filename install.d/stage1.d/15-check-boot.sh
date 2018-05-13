@@ -11,8 +11,8 @@ if [ "$OOS_BOOT_UEFI" = 1 ]; then
 fi
 
 # install grub if using grub
-[ "$OOS_USE_GRUB" = 1 ] && OOS_ADDITIONAL_PACKAGES="$OOS_ADDITIONAL_PACKAGES grub";
+[ "$OOS_USE_GRUB" = 1 ] && OOS_ADDITIONAL_PACKAGES="grub $OOS_ADDITIONAL_PACKAGES";
 # install efibootmgr if using UEFI
-[ "$OOS_BOOT_UEFI" = 1 ] && OOS_ADDITIONAL_PACKAGES_DEFAULT="$OOS_ADDITIONAL_PACKAGES efibootmgr";
+[ "$OOS_BOOT_UEFI" = 1 ] && OOS_ADDITIONAL_PACKAGES="efibootmgr $OOS_ADDITIONAL_PACKAGES";
 
 . $@;
