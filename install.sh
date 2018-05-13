@@ -17,8 +17,12 @@ LANG=C
 OOS_INSTALL_PATH=./install.d/;
 OOS_AWK_PATH=$OOS_INSTALL_PATH/awk.d/;
 OOS_HELPER_PATH=$OOS_INSTALL_PATH/helpers.d/;
+OOS_CONFIG_PATH=./config.conf;
 OOS_INSTALL_CONF_PATH=./install.conf;
 OOS_SKELETON_PATH=./skel.d/;
+
+# Read config from another file
+[ -z "$1" ] && OOS_CONFIG_PATH=$1 && shift;
 
 fatal_error(){
 	echo "Fatal error: The installation cannot continue.";
