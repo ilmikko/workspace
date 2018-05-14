@@ -47,6 +47,7 @@ case "$OOS_NETWORK_DRIVER" in
 		[ ! -z "$OOS_NETWORK_CONFIG_PHASE1" ] && echo "'phase1=\"$OOS_NETWORK_CONFIG_PHASE1\"'" >> "$file";
 		[ ! -z "$OOS_NETWORK_CONFIG_PHASE2" ] && echo "'phase2=\"$OOS_NETWORK_CONFIG_PHASE2\"'" >> "$file";
 		echo "}" >> "$file";
+		;;
 	*)
 		warning "Failed to generate network configurations for driver $OOS_NETWORK_DRIVER!";
 		;;
