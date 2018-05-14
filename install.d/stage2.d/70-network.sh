@@ -2,9 +2,12 @@
 
 log "Generating network configurations...";
 
-if [ -z "$OOS_NETWORK_CONFIG_PHASE2" ]; then
+if [ -z "$OOS_NETWORK_CONFIG_PHASE2" ] && [ ! -z "$OOS_NETWORK_CONFIG_PHASE2_AUTH" ]; then
 	# Use $OOS_NETWORK_CONFIG_PHASE2_AUTH if it is defined
-	[ ! -z "$OOS_NETWORK_CONFIG_PHASE2_AUTH" ] && OOS_NETWORK_CONFIG_PHASE2="auth=$OOS_NETWORK_CONFIG_PHASE2_AUTH";
+
+	# Convert to uppercase
+	OOS_NETWORK_CONFIG_PHASE2_AUTH=$(echo $OOS_NETWORK_CONFIG_PHASE2_AUTH | awk '{ print toupper($0) }');
+	OOS_NETWORK_CONFIG_PHASE2="auth=$OOS_NETWORK_CONFIG_PHASE2_AUTH";
 fi
 
 case "$OOS_NETWORK_DRIVER" in
@@ -36,8 +39,8 @@ case "$OOS_NETWORK_DRIVER" in
 		echo "IP=dhcp" >> "$file";
 		echo "WPAConfigSection={" >> "$file";
 		echo "'ssid=\"$OOS_NETWORK_CONFIG_SSID\"'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_KEY_MGMT" ] && echo "'key_mgmt=$OOS_NETWORK_CONFIG_KEY_MGMT'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_EAP" ] && echo "'eap=$OOS_NETWORK_CONFIG_EAP'" >> "$file";
+		[ ! -z "$OOS_NETWORK_CONFIG_KEY_MGMT" ] && echo "'key_mgmt=$OOS_NETWORK_CONFIG_KEY_MGMT'" | awk -F= '{ sub(";$","",$2); print $1"="toupper($2) }' >> "$file";
+		[ ! -z "$OOS_NETWORK_CONFIG_EAP" ] && echo "'eap=$OOS_NETWORK_CONFIG_EAP'" | awk -F= '{ sub(";\x27$","\x27",$2); print $1"="toupper($2) }' >> "$file";
 		[ ! -z "$OOS_NETWORK_CONFIG_GROUP" ] && echo "'group=$OOS_NETWORK_CONFIG_GROUP'" >> "$file";
 		[ ! -z "$OOS_NETWORK_CONFIG_PAIRWISE" ] && echo "'pairwise=$OOS_NETWORK_CONFIG_PAIRWISE'" >> "$file";
 		[ ! -z "$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY" ] && echo "'anonymous_identity=\"$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY\"'" >> "$file";
