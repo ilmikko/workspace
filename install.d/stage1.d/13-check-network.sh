@@ -79,17 +79,31 @@ oos_probe_wpa_supplicant() {
 	fi
 }
 
+oos_is_running(){
+	proc=$1;
+	empty=$(ps aux | grep -m 1 "$proc" | grep -v grep)
+	[ ! -z "$empty" ];
+}
+
+oos_probe_network_driver() {
+	if oos_is_running NetworkManager; then
+		echo "NetworkManager is running!";
+		oos_probe_nmcli;
+	elif oos_is_running netctl; then
+		echo "Netctl is running!";
+		oos_probe_netctl;
+	elif oos_is_running wpa_supplicant; then
+		echo "wpa_supplicant is running!";
+		oos_probe_wpa_supplicant;
+	else
+		warning "Current network probing failed.";
+	fi
+}
+
 oos_test_connection;
 
 # Try to probe all the required settings (and a bit more) from the current network manager we use
-
-# nmcli: /etc/NetworkManager/system-connections/#{id}
-# wpa_supplicant: /etc/wpa_supplicant/*.conf
-
-
-oos_probe_netctl;
-#oos_probe_nmcli;
-#oos_probe_wpa_supplicant;
+oos_probe_network_driver;
 
 
 # Check which packages need to be installed

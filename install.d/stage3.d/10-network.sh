@@ -14,17 +14,20 @@ case "$OOS_NETWORK_DRIVER" in
 		systemctl disable netctl;
 		systemctl stop netctl;
 
-		systemctl enable wpa_supplicant;
-		systemctl enable dhcpcd;
-		systemctl restart wpa_supplicant;
-		systemctl restart dhcpcd;
+		# Get the wireless interface
+		interface=$(ls /sys/class/net | grep -m 1 wl);
+
+		systemctl enable wpa_supplicant@$interface.service;
+		systemctl restart wpa_supplicant@$interface.service;
+		systemctl enable dhcpcd.service;
+		systemctl restart dhcpcd.service;
 
 		until oos_connectivity_check; do
 			debug "Waiting for us to go online...";
-			sleep 1;
+			sleep 2;
 		done
 
-		log "Hooray, we're online!";
+		log "Huzzah, we're online!";
 
 		;;
 	*)
