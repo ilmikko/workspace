@@ -6,7 +6,7 @@
 
 log "Checking partitioning settings...";
 
-partitions=($OOS_PARTITION_LIST);
+partitions=( $OOS_PARTITIONS );
 
 join_by() {
 	local IFS="$1"; shift; echo "$*";
@@ -111,7 +111,7 @@ debug "This leaves $remaining_space for relative percentages.";
 debug "That is: $remaining_space_human";
 
 # If $remaining_space <= 0, (or ridiculously small), abort saying the disk needs more space for the partitions.
-if [ "$remaining_space" -le "0" ]; then
+if [ "$remaining_space" -lt "0" ]; then
 	abort "The disk needs at least $used_space_human for the installation partitions." "There is only $available_space_human available on $OOS_INSTALL_DEVICE." "Please either resize your partition preferences or choose a different install device.";
 fi
 
@@ -119,8 +119,7 @@ fi
 percentage_sum=$(printf "%s\n" "${relatives[@]}" | awk -F':' '{ total += $2; } END { print total; }');
 debug "Percentage sum: $percentage_sum";
 
-# TODO: Convert the percentages to percentages between 0%..100%?
-if [ ! -z "$percentage_sum" ] && [ "$percentage_sum" != 100 ]; then
+if [ ! -z "${relatives[@]}" ] && [ "$percentage_sum" != 100 ]; then
 	abort "The relative partition percentages do not sum up to 100%." "They sum up to $percentage_sum%." "Please check your configuration.";
 fi
 

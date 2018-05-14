@@ -27,7 +27,7 @@ You can check the available timezones in `/usr/share/zoneinfo`
 
 #### Partitions and mounting
 
-##### OOS_PARTITION_LIST
+##### OOS_PARTITIONS
 Which partitions to create (there should be an example of this)
 
 ##### OOS_MOUNT_FOLDER

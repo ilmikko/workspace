@@ -61,4 +61,8 @@ OOS_LANG_DEFAULT="en_US.UTF-8" && aggregate_variable "OOS_LANG";
 OOS_LOCALE_DEFAULT="en_US" && aggregate_variable "OOS_LOCALE";
 OOS_TIMEZONE_DEFAULT="UTC" && aggregate_variable "OOS_TIMEZONE";
 
+# Network settings
+
+OOS_NETWORK_DRIVER_DEFAULT="wpa_supplicant" && aggregate_variable "OOS_NETWORK_DRIVER";
+
 . $@;
