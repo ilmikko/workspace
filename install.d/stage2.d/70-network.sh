@@ -16,8 +16,8 @@ case "$OOS_NETWORK_DRIVER" in
 		[ ! -z "$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY" ] && echo "anonymous_identity=\"$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY\"" >> $file;
 		[ ! -z "$OOS_NETWORK_CONFIG_PASSWORD" ] && echo "password=\"$OOS_NETWORK_CONFIG_PASSWORD\"" >> $file;
 		[ ! -z "$OOS_NETWORK_CONFIG_CA_CERT" ] && echo "ca_cert=\"$OOS_NETWORK_CONFIG_CA_CERT\"" >> $file;
-		[ ! -z "$OOS_NETWORK_CONFIG_PHASE1" ] && echo "phase1=$OOS_NETWORK_CONFIG_PHASE1" >> $file;
-		[ ! -z "$OOS_NETWORK_CONFIG_PHASE2" ] && echo "phase2=$OOS_NETWORK_CONFIG_PHASE2" >> $file;
+		[ ! -z "$OOS_NETWORK_CONFIG_PHASE1" ] && echo "phase1=\"$OOS_NETWORK_CONFIG_PHASE1\"" >> $file;
+		[ ! -z "$OOS_NETWORK_CONFIG_PHASE2" ] && echo "phase2=\"$OOS_NETWORK_CONFIG_PHASE2\"" >> $file;
 		echo "}" >> $file;
 		;;
 	*)
