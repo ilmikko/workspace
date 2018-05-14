@@ -11,7 +11,6 @@ OOS_ARCH=$(arch);
 
 export_config "OOS_SHELL";
 export_config "OOS_ARCH";
-export_config "OOS_INSTALL_DEVICE";
 export_config "OOS_DISTRIBUTION";
 
 log "Checking runtime environment...";

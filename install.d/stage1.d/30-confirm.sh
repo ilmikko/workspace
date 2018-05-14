@@ -3,6 +3,8 @@
 # This should be verbose enough to show everything that was configured, and this script is also
 # responsible for storing the config file for the later installation stages.
 
+. "$OOS_INSTALL_CONF_PATH";
+
 log;
 log "================================================================================";
 log "             Please make sure the following information is correct.";
@@ -11,6 +13,9 @@ log;
 log "Installation device: $OOS_INSTALL_DEVICE";
 log "Installation packages: $OOS_INSTALL_PACKAGES $OOS_DEFAULT_PACKAGES $OOS_ADDITIONAL_PACKAGES";
 log "Installation name: $OOS_INSTALL_NAME";
+log;
+log "Network driver: $OOS_NETWORK_DRIVER";
+log "Network SSID: $OOS_NETWORK_CONFIG_SSID";
 log;
 log "Partitions:";
 pretty_print_partitions ${OOS_PARTITIONS[@]};
