@@ -43,4 +43,7 @@
 	
 	# Tell the script it's now stage 2
 	touch stage2;
+	
+	# Call the script again for now
+	bash $0;
 	exit;
