@@ -15,6 +15,8 @@ This will determine some settings such as the bootloader ID.
 ##### OOS_INSTALL_PACKAGES
 Which packages to install using pacman / pacaur in stage 3.
 
+#### Localization
+
 ##### OOS_LOCALE
 Which locales are enabled? Does not have to be the full locale;
 for example: `en_US fi_FI` would enable all locales starting with these values
@@ -22,6 +24,8 @@ for example: `en_US fi_FI` would enable all locales starting with these values
 ##### OOS_TIMEZONE
 Which timezone to use?
 You can check the available timezones in `/usr/share/zoneinfo`
+
+#### Partitions and mounting
 
 ##### OOS_PARTITION_LIST
 Which partitions to create (there should be an example of this)
@@ -40,6 +44,26 @@ Use UEFI boot instead of BIOS boot.
 ##### OOS_UNMOUNT_AFTER_INSTALL
 Unmount the filesystems after installation
 Default: `1`
+
+#### Network settings
+
+_TODO: If any specifics are needed to be provided, we can just turn the options straight into the corresponding settings._
+For example: `OOS_NETWORK_MAC_ADDRESS` becomes `mac-address` in the system connections.
+Or, if you want to, `OOS_NETWORK_KEY_MGMT` becomes `key-mgmt`, etc...
+
+##### OOS_NETWORK_DRIVER
+Which network driver to support?
+Currently only wpa_supplicant is supported, however nmcli is also planned.
+Default: `wpa_supplicant`
+
+##### OOS_NETWORK_SSID
+SSID of the network to connect to.
+This needs to be supplied - we need internet connection to install.
+_TODO: Could this be probed?_
+
+##### OOS_NETWORK_PSK
+Password of the network to connect to.
+_TODO: These settings could be probed as well_
 
 ### Advanced options
 
