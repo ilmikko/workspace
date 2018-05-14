@@ -10,7 +10,7 @@ oos_test_connection() {
 
 oos_convert_to_variables() {
 	file=$1;
-	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print "export \"OOS_NETWORK_"toupper($1)"="$2"\"" } }';
+	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print "export \"OOS_NETWORK_CONFIG_"toupper($1)"="$2"\"" } }';
 }
 
 oos_probe_nmcli() {
@@ -38,6 +38,7 @@ oos_get_ssid_nmcli() {
 oos_probe_wpa_supplicant() {
 	log "Probing wpa supplicant...";
 	warning "Not supported yet";
+	cat /etc/wpa_supplicant/wpa_supplicant.conf | awk -F= 'BEGIN { t=!!t; } { if ($1=="}") t=!t; if (t) print $0; if ($1=="network") t=!t; }';
 }
 
 oos_test_connection;
@@ -57,11 +58,18 @@ case "$OOS_NETWORK_DRIVER" in
 	"wpa_supplicant")
 		OOS_ADDITIONAL_PACKAGES="wpa_supplicant $OOS_ADDITIONAL_PACKAGES";
 		;;
-	[Nn]"etwork"[Mm]"anager"|nmcli)
+	"networkmanager")
 		OOS_ADDITIONAL_PACKAGES="networkmanager $OOS_ADDITIONAL_PACKAGES";
+		;;
+	"netctl")
+		OOS_ADDITIONAL_PACKAGES="$OOS_ADDITIONAL_PACKAGES";
 		;;
 	*)
 		abort "Unknown network driver: $OOS_NETWORK_DRIVER!";
+		;;
 esac
+
+# We need this again in stage 3
+export_config 'OOS_NETWORK_DRIVER';
 
 . $@;
