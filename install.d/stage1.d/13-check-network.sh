@@ -26,7 +26,7 @@ oos_netctl_to_variables() {
 	PHASE2_AUTH=$(cat $file | awk -F= '{ print toupper($1)"="$2"="$3 }' | awk -F= '/PHASE2/ { gsub("^[\"\x27]*|[\"\x27]*$","",$2); if (toupper($2)=="AUTH") { gsub("^[\"\x27]*|[\"\x27]*$","",$3); print $3 } }');
 	[ -z "$PHASE2_AUTH" ] || echo "export \"OOS_NETWORK_CONFIG_PHASE2_AUTH=$PHASE2_AUTH\"";
 
-	cat $file | awk -F= 'BEGIN { OFS=FS } { gsub("^\x27|\x27$","",$2); if ($2) { gsub("-","_",$1); sub("^.*\x27","",$1); $1=toupper($1); print $0; } }' | awk -F= 'BEGIN { OFS=FS } { gsub("\"","",$2); gsub("\"","",$0); print "export \"OOS_NETWORK_CONFIG_"$0"\""; }';
+	cat $file | awk -F= 'BEGIN { OFS=FS } { gsub("^[\"\x27]*|[\"\x27]*$","",$2); gsub("[\"\x27]*$","",$0); if ($2) { gsub("-","_",$1); sub("^.*\x27","",$1); $1=toupper($1); print $0; } }' | awk -F= 'BEGIN { OFS=FS } { gsub("\"","",$2); gsub("\"","",$0); print "export \"OOS_NETWORK_CONFIG_"$0"\""; }';
 }
 
 oos_probe_nmcli() {

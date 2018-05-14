@@ -17,6 +17,12 @@ case "$OOS_NETWORK_DRIVER" in
 		[ ! -z "$OOS_NETWORK_CONFIG_PASSWORD" ] && echo "password=\"$OOS_NETWORK_CONFIG_PASSWORD\"" >> $file;
 		[ ! -z "$OOS_NETWORK_CONFIG_CA_CERT" ] && echo "ca_cert=\"$OOS_NETWORK_CONFIG_CA_CERT\"" >> $file;
 		[ ! -z "$OOS_NETWORK_CONFIG_PHASE1" ] && echo "phase1=\"$OOS_NETWORK_CONFIG_PHASE1\"" >> $file;
+
+		if [ -z "$OOS_NETWORK_CONFIG_PHASE1" ]; then
+			# Use $OOS_NETWORK_CONFIG_PHASE2_AUTH if it is defined
+			[ ! -z "$OOS_NETWORK_CONFIG_PHASE2_AUTH" ] && OOS_NETWORK_CONFIG_PHASE2="auth=$OOS_NETWORK_CONFIG_PHASE2_AUTH";
+		fi
+
 		[ ! -z "$OOS_NETWORK_CONFIG_PHASE2" ] && echo "phase2=\"$OOS_NETWORK_CONFIG_PHASE2\"" >> $file;
 		echo "}" >> $file;
 		;;
