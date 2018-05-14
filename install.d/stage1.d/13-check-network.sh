@@ -51,4 +51,17 @@ oos_test_connection;
 oos_probe_nmcli;
 #oos_probe_wpa_supplicant;
 
+
+# Check which packages need to be installed
+case "$OOS_NETWORK_DRIVER" in
+	"wpa_supplicant")
+		OOS_ADDITIONAL_PACKAGES="wpa_supplicant $OOS_ADDITIONAL_PACKAGES";
+		;;
+	[Nn]"etwork"[Mm]"anager"|nmcli)
+		OOS_ADDITIONAL_PACKAGES="networkmanager $OOS_ADDITIONAL_PACKAGES";
+		;;
+	*)
+		abort "Unknown network driver: $OOS_NETWORK_DRIVER!";
+esac
+
 . $@;

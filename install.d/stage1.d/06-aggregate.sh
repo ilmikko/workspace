@@ -25,6 +25,7 @@ OOS_USE_STRAP_DEFAULT=1 && aggregate_variable "OOS_USE_STRAP";
 OOS_USE_SKELETON_DEFAULT=1 && aggregate_variable "OOS_USE_SKELETON";
 OOS_USE_REBOOT_DEFAULT=1 && aggregate_variable "OOS_USE_REBOOT";
 OOS_USE_BOOTLOADER_DEFAULT=1 && aggregate_variable "OOS_USE_BOOTLOADER";
+OOS_USE_MOUNTING_DEFAULT=1 && aggregate_variable "OOS_USE_MOUNTING";
 
 OOS_USE_PACSTRAP_DEFAULT=1 && aggregate_variable "OOS_USE_PACSTRAP";
 OOS_USE_GRUB_DEFAULT=1 && aggregate_variable "OOS_USE_GRUB";

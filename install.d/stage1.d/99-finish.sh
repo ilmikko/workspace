@@ -5,6 +5,9 @@
 	export_config "OOS_INSTALL_NAME";
 
 	export_config "OOS_PARTITION_DISK_LABEL";
+
+	OOS_PARTITIONS="${OOS_PARTITIONS[@]}";
+
 	export_config "OOS_PARTITIONS";
 
 	export_config "OOS_MOUNT_FOLDER";
