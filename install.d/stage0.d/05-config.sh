@@ -11,6 +11,7 @@ if [ -f "$OOS_INSTALL_CONF_PATH" ]; then
 	if [ -a "stage2" ] || assume "Do you want to use this file"; then
 		# Load the config file
 		. "$OOS_INSTALL_CONF_PATH";
+		OOS_CONFIG_LOADED=1;
 		
 		# Go to next file
 		. $@;
