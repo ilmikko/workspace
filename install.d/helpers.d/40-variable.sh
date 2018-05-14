@@ -39,6 +39,13 @@ aggregate_variable() {
 	export $1="$env_var";
 }
 
+export_config() {
+	var=$1;
+	value=$(eval echo "\$$var");
+	debug "$var=$value";
+	echo "export \"$var=$value\"" >> $OOS_INSTALL_CONF_PATH;
+}
+
 oos_set() {
 	export $1=$2;
 }

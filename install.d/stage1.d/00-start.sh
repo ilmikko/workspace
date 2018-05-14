@@ -10,7 +10,8 @@ if ! shell_supported $OOS_SHELL; then
 fi
 
 # Create a new install.conf file
-echo "export \"OOS_STAGE1_SHELL=$OOS_SHELL\"" > $OOS_INSTALL_CONF_PATH;
+rm install.conf;
+touch install.conf;
 
 # Next file
 . $@;

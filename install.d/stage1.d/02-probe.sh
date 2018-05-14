@@ -9,10 +9,10 @@ log "Getting system information...";
 OOS_DISTRIBUTION=$(distribution);
 OOS_ARCH=$(arch);
 
-debug "OOS_SHELL=$OOS_SHELL";
-debug "OOS_ARCH=$OOS_ARCH";
-debug "OOS_INSTALL_DEVICE=$OOS_INSTALL_DEVICE";
-debug "OOS_DISTRIBUTION=$OOS_DISTRIBUTION";
+export_config "OOS_SHELL";
+export_config "OOS_ARCH";
+export_config "OOS_INSTALL_DEVICE";
+export_config "OOS_DISTRIBUTION";
 
 log "Checking runtime environment...";
 

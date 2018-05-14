@@ -6,11 +6,11 @@
 # TODO: On stage 2..3, we only need to source $OOS_INSTALL_CONF_LOCATION and we're good to go
 
 # An option to fast track if the config file is found already
-if [ -f "$OOS_INSTALL_CONF_PATH" ]; then
-	log "The install file was found in $(realpath "$OOS_INSTALL_CONF_PATH").";
+if [ -f "$OOS_INSTALL_CONF_PATH.prev" ]; then
+	log "A previous install file was found in $(realpath "$OOS_INSTALL_CONF_PATH.prev").";
 	if [ -a "stage2" ] || assume "Do you want to use this file"; then
 		# Load the config file
-		. "$OOS_INSTALL_CONF_PATH";
+		. "$OOS_INSTALL_CONF_PATH.prev";
 		OOS_CONFIG_LOADED=1;
 		
 		# Go to next file

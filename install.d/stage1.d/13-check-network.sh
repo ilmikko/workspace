@@ -10,7 +10,7 @@ oos_test_connection() {
 
 oos_convert_to_variables() {
 	file=$1;
-	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print "export OOS_NETWORK_"toupper($1)"="$2 } }';
+	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print "export \"OOS_NETWORK_"toupper($1)"="$2"\"" } }';
 }
 
 oos_probe_nmcli() {
@@ -24,7 +24,7 @@ oos_probe_nmcli() {
 
 	OOS_NETWORKMANAGER_PATH=/etc/NetworkManager/system-connections/;
 	if [ -f "$OOS_NETWORKMANAGER_PATH/$ssid" ]; then
-		oos_convert_to_variables "$OOS_NETWORKMANAGER_PATH/$ssid";
+		oos_convert_to_variables "$OOS_NETWORKMANAGER_PATH/$ssid" >> "$OOS_INSTALL_CONF_PATH";
 	else
 		warning "Cannot predetermine network settings, those need to be input manually...";
 	fi
@@ -50,3 +50,5 @@ oos_test_connection;
 # TODO: Check whether we are using nmcli or wpa_supplicant or something else
 oos_probe_nmcli;
 #oos_probe_wpa_supplicant;
+
+. $@;
