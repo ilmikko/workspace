@@ -37,7 +37,8 @@ case "$OOS_NETWORK_DRIVER" in
 			warning "Cannot find network file... trying to probe the file manually.";
 			# Do some magic with "netctl list"
 		fi
-		cat "$file" | sed 's/Interface=.*/Interface='$interface'/' > "$file";
+		cat "$file" | sed 's/Interface=.*/Interface='$interface'/' > "$file.temp";
+		mv "$file.temp" "$file";
 
 		# Enable the services
 		systemctl enable netctl;
