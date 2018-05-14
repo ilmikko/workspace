@@ -125,4 +125,7 @@ esac
 # We need this again in stage 3
 export_config 'OOS_NETWORK_DRIVER';
 
+# SSID cannot be empty
+[ -z "$OOS_NETWORK_CONFIG_SSID" ] && abort "No network provided; SSID is empty!";
+
 . $@;
