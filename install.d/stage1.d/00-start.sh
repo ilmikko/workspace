@@ -9,5 +9,8 @@ if ! shell_supported $OOS_SHELL; then
 	confirm "Shell $OOS_SHELL is not supported, the installation may misbehave. Do you want to continue" || abort "Installation cancelled.";
 fi
 
+# Create a new install.conf file
+echo "export \"OOS_STAGE1_SHELL=$OOS_SHELL\"" > $OOS_INSTALL_CONF_PATH;
+
 # Next file
 . $@;
