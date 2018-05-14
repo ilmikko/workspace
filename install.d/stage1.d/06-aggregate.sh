@@ -38,7 +38,7 @@ OOS_INSTALL_NAME_DEFAULT="OOS-$(date "+%Y%M%d")" && aggregate_variable "OOS_INST
 aggregate_variable "OOS_INSTALL_DEVICE";
 
 # aggregate partitions
-aggregate_variable "OOS_PARTITION_LIST";
+aggregate_variable "OOS_PARTITIONS";
 OOS_PARTITION_DISK_LABEL_DEFAULT="gpt" && aggregate_variable "OOS_PARTITION_DISK_LABEL";
 
 # Booting

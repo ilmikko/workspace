@@ -23,6 +23,9 @@ is_percentage() {
 # Check that partition table is supported
 oos_partlabel_supported $OOS_PARTITION_DISK_LABEL || abort "Partition disk label $OOS_PARTITION_DISK_LABEL is not supported! (OOS_PARTITION_DISK_LABEL)";
 
+# Check that there is at least one partition
+[ "${#partitions[@]}" = 0 ] && abort "There are 0 partitions defined!" "Please define the partitions you want to use in OOS_PARTITIONS.";
+
 # Check that the partitions that the user wants are sane.
 for (( i=0; i<${#partitions[@]}; i++ )) do
 	split=(${partitions[$i]//:/ });
@@ -119,7 +122,7 @@ fi
 percentage_sum=$(printf "%s\n" "${relatives[@]}" | awk -F':' '{ total += $2; } END { print total; }');
 debug "Percentage sum: $percentage_sum";
 
-if [ ! -z "${relatives[@]}" ] && [ "$percentage_sum" != 100 ]; then
+if [ "${#relatives[@]}" != 0 ] && [ "$percentage_sum" != 100 ]; then
 	abort "The relative partition percentages do not sum up to 100%." "They sum up to $percentage_sum%." "Please check your configuration.";
 fi
 
