@@ -11,7 +11,7 @@ oos_test_connection() {
 oos_nmcli_to_variables() {
 	# Convert network manager's config file into environment variables
 	file=$1;
-	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print "export \"OOS_NETWORK_CONFIG_"toupper($1)"="$2"\"" } }';
+	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print toupper($1)"="$2 } }' | awk -F= '{ sub(";$","",$0); if ($1=="EAP"||$1=="KEY_MGMT"||$1=="PHASE2_AUTH") { print $1"="toupper($2) } else { print $0 } }';
 }
 
 oos_wpa_to_variables() {
@@ -40,7 +40,12 @@ oos_probe_nmcli() {
 
 	OOS_NETWORKMANAGER_PATH=/etc/NetworkManager/system-connections/;
 	if [ -f "$OOS_NETWORKMANAGER_PATH/$ssid" ]; then
-		oos_nmcli_to_variables "$OOS_NETWORKMANAGER_PATH/$ssid" >> "$OOS_INSTALL_CONF_PATH";
+		# Load the variables into a temp file, then concat
+		temp="$(mktemp /tmp/oos_probe.XXXXXX)";
+		oos_nmcli_to_variables "$OOS_NETWORKMANAGER_PATH/$ssid" >> "$temp";
+		. "$temp";
+		cat "$temp" >> "$OOS_INSTALL_CONF_PATH";
+		rm "$temp";
 	else
 		warning "Cannot predetermine network settings, those need to be input manually...";
 	fi
@@ -62,7 +67,12 @@ oos_probe_netctl() {
 
 	OOS_NETCTL_PATH=/etc/netctl/;
 	if [ -f "$OOS_NETCTL_PATH/$ssid" ]; then
-		oos_netctl_to_variables "$OOS_NETCTL_PATH/$ssid" >> "$OOS_INSTALL_CONF_PATH";
+		# Load the variables into a temp file, then concat
+		temp="$(mktemp /tmp/oos_probe.XXXXXX)";
+		oos_netctl_to_variables "$OOS_NETCTL_PATH/$ssid" >> "$temp";
+		. "$temp";
+		cat "$temp" >> "$OOS_INSTALL_CONF_PATH";
+		rm "$temp";
 	else
 		warning "Cannot predetermine network settings, those need to be input manually...";
 	fi
@@ -71,9 +81,15 @@ oos_probe_netctl() {
 oos_probe_wpa_supplicant() {
 	debug "Probing wpa supplicant...";
 
-	OOS_WPA_SUPPLICANT_PATH=/etc/wpa_supplicant/wpa_supplicant.conf;
+	OOS_WPA_SUPPLICANT_PATH=(/etc/wpa_supplicant/wpa_supplicant*.conf);
+	OOS_WPA_SUPPLICANT_PATH=${OOS_WPA_SUPPLICANT_PATH[0]};
 	if [ -f "$OOS_WPA_SUPPLICANT_PATH" ]; then
-		oos_wpa_to_variables "$OOS_WPA_SUPPLICANT_PATH" >> "$OOS_INSTALL_CONF_PATH";
+		# Load the variables into a temp file, then concat
+		temp="$(mktemp /tmp/oos_probe.XXXXXX)";
+		oos_wpa_to_variables "$OOS_WPA_SUPPLICANT_PATH" >> "$temp";
+		. "$temp";
+		cat "$temp" >> "$OOS_INSTALL_CONF_PATH";
+		rm "$temp";
 	else
 		warning "Cannot predetermine network settings, those need to be input manually...";
 	fi

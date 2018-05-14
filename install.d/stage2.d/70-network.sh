@@ -10,22 +10,52 @@ if [ -z "$OOS_NETWORK_CONFIG_PHASE2" ] && [ ! -z "$OOS_NETWORK_CONFIG_PHASE2_AUT
 	OOS_NETWORK_CONFIG_PHASE2="auth=$OOS_NETWORK_CONFIG_PHASE2_AUTH";
 fi
 
+config_include_property() {
+	key=$1;
+	value=$2;
+	file=$3;
+
+	# No need to include a value that is empty, right?
+	[ -z "$value" ] || echo "$key=$value" >> "$file";
+}
+
+# TODO: Redundant
+config_include_property_sq() {
+	key=$1;
+	value=$2;
+	file=$3;
+
+	[ -z "$value" ] || echo "'$key=$value'" >> "$file";
+}
+
+oos_strip_property() {
+	echo "$@" | awk '{ sub(";$","",$0); print toupper($0); }';
+}
+
+wrap_in_singles() {
+	[ -z "$@" ] || echo "'$@'";
+}
+
+wrap_in_doubles() {
+	[ -z "$@" ] || echo \"$@\";
+}
+
 case "$OOS_NETWORK_DRIVER" in
 	"wpa_supplicant")
 		file=$OOS_ROOT_FOLDER/etc/wpa_supplicant/wpa_supplicant.conf
 		mkdir -p "$(dirname $file)";
 		echo "network={" > "$file";
-		echo "ssid=\"$OOS_NETWORK_CONFIG_SSID\"" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_KEY_MGMT" ] && echo "key_mgmt=$OOS_NETWORK_CONFIG_KEY_MGMT" | awk -F= '{ sub(";$","",$2); print $1"="toupper($2) }' >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PROTO" ] && echo "proto=$OOS_NETWORK_CONFIG_PROTO" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PAIRWISE" ] && echo "pairwise=$OOS_NETWORK_CONFIG_PAIRWISE" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_EAP" ] && echo "eap=$OOS_NETWORK_CONFIG_EAP" | awk -F= '{ sub(";$","",$2); print $1"="toupper($2) }' >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_IDENTITY" ] && echo "identity=\"$OOS_NETWORK_CONFIG_IDENTITY\"" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY" ] && echo "anonymous_identity=\"$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY\"" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PASSWORD" ] && echo "password=\"$OOS_NETWORK_CONFIG_PASSWORD\"" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_CA_CERT" ] && echo "ca_cert=\"$OOS_NETWORK_CONFIG_CA_CERT\"" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PHASE1" ] && echo "phase1=\"$OOS_NETWORK_CONFIG_PHASE1\"" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PHASE2" ] && echo "phase2=\"$OOS_NETWORK_CONFIG_PHASE2\"" >> "$file";
+		config_include_property ssid "$(wrap_in_doubles $OOS_NETWORK_CONFIG_SSID)" "$file";
+		config_include_property key_mgmt "$(oos_strip_property $OOS_NETWORK_CONFIG_KEY_MGMT)" "$file";
+		config_include_property eap "$(oos_strip_property $OOS_NETWORK_CONFIG_EAP)" "$file";
+		config_include_property group "$OOS_NETWORK_CONFIG_GROUP" "$file";
+		config_include_property pairwise "$OOS_NETWORK_CONFIG_PAIRWISE" "$file";
+		config_include_property anonymous_identity "$(wrap_in_doubles $OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY)" "$file";
+		config_include_property identity "$(wrap_in_doubles $OOS_NETWORK_CONFIG_IDENTITY)" "$file";
+		config_include_property password "$(wrap_in_doubles $OOS_NETWORK_CONFIG_PASSWORD)" "$file";
+		config_include_property priority "$OOS_NETWORK_CONFIG_PRIORITY" "$file";
+		config_include_property phase1 "$(wrap_in_doubles $OOS_NETWORK_CONFIG_PHASE1)" "$file";
+		config_include_property phase2 "$(wrap_in_doubles $OOS_NETWORK_CONFIG_PHASE2)" "$file";
 		echo "}" >> "$file";
 		;;
 	"netctl")
@@ -38,17 +68,17 @@ case "$OOS_NETWORK_DRIVER" in
 		echo "Security=wpa-configsection" >> "$file";
 		echo "IP=dhcp" >> "$file";
 		echo "WPAConfigSection={" >> "$file";
-		echo "'ssid=\"$OOS_NETWORK_CONFIG_SSID\"'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_KEY_MGMT" ] && echo "'key_mgmt=$OOS_NETWORK_CONFIG_KEY_MGMT'" | awk -F= '{ sub(";$","",$2); print $1"="toupper($2) }' >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_EAP" ] && echo "'eap=$OOS_NETWORK_CONFIG_EAP'" | awk -F= '{ sub(";\x27$","\x27",$2); print $1"="toupper($2) }' >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_GROUP" ] && echo "'group=$OOS_NETWORK_CONFIG_GROUP'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PAIRWISE" ] && echo "'pairwise=$OOS_NETWORK_CONFIG_PAIRWISE'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY" ] && echo "'anonymous_identity=\"$OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY\"'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_IDENTITY" ] && echo "'identity=\"$OOS_NETWORK_CONFIG_IDENTITY\"'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PASSWORD" ] && echo "'password=\"$OOS_NETWORK_CONFIG_PASSWORD\"'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PRIORITY" ] && echo "'priority=$OOS_NETWORK_CONFIG_PRIORITY'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PHASE1" ] && echo "'phase1=\"$OOS_NETWORK_CONFIG_PHASE1\"'" >> "$file";
-		[ ! -z "$OOS_NETWORK_CONFIG_PHASE2" ] && echo "'phase2=\"$OOS_NETWORK_CONFIG_PHASE2\"'" >> "$file";
+		config_include_property_sq ssid "$(wrap_in_doubles $OOS_NETWORK_CONFIG_SSID)" "$file";
+		config_include_property_sq key_mgmt "$(oos_strip_property $OOS_NETWORK_CONFIG_KEY_MGMT)" "$file";
+		config_include_property_sq eap "$(oos_strip_property $OOS_NETWORK_CONFIG_EAP)" "$file";
+		config_include_property_sq group "$OOS_NETWORK_CONFIG_GROUP" "$file";
+		config_include_property_sq pairwise "$OOS_NETWORK_CONFIG_PAIRWISE" "$file";
+		config_include_property_sq anonymous_identity "$(wrap_in_doubles $OOS_NETWORK_CONFIG_ANONYMOUS_IDENTITY)" "$file";
+		config_include_property_sq identity "$(wrap_in_doubles $OOS_NETWORK_CONFIG_IDENTITY)" "$file";
+		config_include_property_sq password "$(wrap_in_doubles $OOS_NETWORK_CONFIG_PASSWORD)" "$file";
+		config_include_property_sq priority "$OOS_NETWORK_CONFIG_PRIORITY" "$file";
+		config_include_property_sq phase1 "$(wrap_in_doubles $OOS_NETWORK_CONFIG_PHASE1)" "$file";
+		config_include_property_sq phase2 "$(wrap_in_doubles $OOS_NETWORK_CONFIG_PHASE2)" "$file";
 		echo "}" >> "$file";
 		;;
 	*)
