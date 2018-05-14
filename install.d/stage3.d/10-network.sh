@@ -7,6 +7,10 @@ oos_connectivity_check() {
 	curl -s "$OOS_NETWORK_CONNECTION_TEST" > /dev/null
 }
 
+oos_get_wireless_interface() {
+	ls /sys/class/net | grep -m 1 wl;
+}
+
 case "$OOS_NETWORK_DRIVER" in
 	"wpa_supplicant")
 		# The configuration file lies in /etc/wpa_supplicant/wpa_supplicant.conf
@@ -15,22 +19,39 @@ case "$OOS_NETWORK_DRIVER" in
 		systemctl stop netctl;
 
 		# Get the wireless interface
-		interface=$(ls /sys/class/net | grep -m 1 wl);
+		interface=$(oos_get_wireless_interface);
 
 		systemctl enable wpa_supplicant@$interface.service;
 		systemctl restart wpa_supplicant@$interface.service;
 		systemctl enable dhcpcd.service;
 		systemctl restart dhcpcd.service;
+		;;
+	"netctl")
+		# We need to get the interface now that we're here, and append that to the configuration file.
+		# Then we can enable the services.
 
-		until oos_connectivity_check; do
-			debug "Waiting for us to go online...";
-			sleep 2;
-		done
+		interface=$(oos_get_wireless_interface);
 
-		log "Huzzah, we're online!";
+		file="/etc/netctl/$OOS_NETWORK_CONFIG_SSID";
+		if [ ! -f "$file" ]; then
+			warning "Cannot find network file... trying to probe the file manually.";
+			# Do some magic with "netctl list"
+		fi
+		cat "$file" | sed 's/Interface=.*/Interface='$interface'/' > "$file";
 
+		# Enable the services
+		systemctl enable netctl;
+		systemctl restart netctl;
+		netctl restart "$OOS_NETWORK_CONFIG_SSID";
 		;;
 	*)
 		error "TODO!";
 		;;
 esac
+
+until oos_connectivity_check; do
+	debug "Waiting for us to go online...";
+	sleep 2;
+done
+
+log "Huzzah, we're online!";

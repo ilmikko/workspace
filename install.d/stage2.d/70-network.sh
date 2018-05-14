@@ -25,7 +25,8 @@ config_include_property_sq() {
 	value=$2;
 	file=$3;
 
-	[ -z "$value" ] || echo "'$key=$value'" >> "$file";
+	# These four spaces in the front are important
+	[ -z "$value" ] || echo "    '$key=$value'" >> "$file";
 }
 
 oos_strip_property() {

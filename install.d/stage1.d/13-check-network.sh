@@ -11,7 +11,7 @@ oos_test_connection() {
 oos_nmcli_to_variables() {
 	# Convert network manager's config file into environment variables
 	file=$1;
-	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print toupper($1)"="$2 } }' | awk -F= '{ sub(";$","",$0); if ($1=="EAP"||$1=="KEY_MGMT"||$1=="PHASE2_AUTH") { print $1"="toupper($2) } else { print $0 } }';
+	cat "$file" | grep = | awk -F= '{ if (!a[$1]++) { gsub("-","_",$1); print toupper($1)"="$2 } }' | awk -F= '{ sub(";$","",$0); if ($1=="EAP"||$1=="KEY_MGMT"||$1=="PHASE2_AUTH") { print $1"="toupper($2) } else { print $0 } }' | awk '{ print "export \"OOS_NETWORK_CONFIG_"$0"\"" }';
 }
 
 oos_wpa_to_variables() {
