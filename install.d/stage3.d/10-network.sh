@@ -45,8 +45,15 @@ case "$OOS_NETWORK_DRIVER" in
 		systemctl restart netctl;
 		netctl restart "$OOS_NETWORK_CONFIG_SSID";
 		;;
+	"networkmanager")
+		systemctl disable netctl;
+		systemctl stop netctl;
+
+		# Enable the connection
+		nmcli con up "$OOS_NETWORK_CONFIG_SSID";
+		;;
 	*)
-		error "TODO!";
+		error "Cannot connect to the internet - invalid network driver!" "This is most likely due to a bug. Sorry!";
 		;;
 esac
 

@@ -82,6 +82,38 @@ case "$OOS_NETWORK_DRIVER" in
 		config_include_property_sq phase2 "$(wrap_in_doubles $OOS_NETWORK_CONFIG_PHASE2)" "$file";
 		echo ")" >> "$file";
 		;;
+	"networkmanager")
+		file="$OOS_ROOT_FOLDER/etc/NetworkManager/system-connections/$OOS_NETWORK_CONFIG_SSID";
+		mkdir -p "$(dirname $file)";
+
+		echo "[connection]" > "$file";
+		config_include_property id "$OOS_NETWORK_CONFIG_SSID" "$file";
+		config_include_property uuid "$OOS_NETWORK_CONFIG_UUID" "$file";
+		config_include_property type "$OOS_NETWORK_CONFIG_TYPE" "$file";
+		config_include_property permissions "$OOS_NETWORK_CONFIG_PERMISSIONS" "$file";
+		echo >> "$file";
+		echo "[wifi]" >> "$file";
+		config_include_property ssid "$OOS_NETWORK_CONFIG_SSID" "$file";
+		echo >> "$file";
+		echo "[wifi-security]" >> "$file";
+		config_include_property key-mgmt "$OOS_NETWORK_CONFIG_KEY_MGMT" "$file";
+		echo >> "$file";
+		echo "[802-1x]" >> "$file";
+		config_include_property "ca-cert" "$OOS_NETWORK_CONFIG_CA_CERT" "$file";
+		config_include_property eap "$OOS_NETWORK_CONFIG_EAP" "$file";
+		config_include_property identity "$OOS_NETWORK_CONFIG_IDENTITY" "$file";
+		config_include_property password "$OOS_NETWORK_CONFIG_PASSWORD" "$file";
+		config_include_property "phase2-auth" "$OOS_NETWORK_CONFIG_PHASE2_AUTH" "$file";
+		echo >> "$file";
+		echo "[ipv4]" >> "$file";
+		config_include_property "dns-search" "$OOS_NETWORK_CONFIG_DNS_SEARCH" "$file";
+		config_include_property "method" "$OOS_NETWORK_CONFIG_METHOD" "$file";
+		echo >> "$file";
+		echo "[ipv6]" >> "$file";
+		config_include_property "addr-gen-mode" "$OOS_NETWORK_CONFIG_ADDR_GEN_MODE" "$file";
+		config_include_property "dns-search" "$OOS_NETWORK_CONFIG_DNS_SEARCH" "$file";
+		config_include_property "method" "$OOS_NETWORK_CONFIG_METHOD" "$file";
+		;;
 	*)
 		warning "Failed to generate network configurations for driver $OOS_NETWORK_DRIVER!";
 		;;
