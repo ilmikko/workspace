@@ -76,6 +76,7 @@ bindkey -v
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3' # Yellow
 
 source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
