@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ -z $1 ]; then
+        echo "Usage: volume [amixer master]"
+        exit 1
+fi
+amixer set Master $1
+aftervol=$(amixer get Master | grep -m 1 % | sed -e "s/[^[]*\[//" | sed -e "s/].*//")
+muted=$(amixer get Master | grep -m 1 off)
+if [ -z $muted ]; then
+        twmnc --id 28282 -c "Volume $aftervol"
+else
+        twmnc --id 28282 -c "Volume Muted"
+fi

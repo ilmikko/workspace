@@ -1,0 +1,4 @@
+level=$(cat /sys/class/power_supply/BAT0/capacity)
+status=$(cat /sys/class/power_supply/BAT0/status)
+echo Battery level: $level% \($status\)
+notify-send "Battery: $level% ($status)"

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+xsetwacom set "N-Trig Pen stylus" MapToOutput LVDS-1
+xsetwacom set "N-Trig Pen eraser" MapToOutput LVDS-1
+xsetwacom set "N-Trig Pen pad" MapToOutput LVDS-1
