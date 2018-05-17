@@ -49,7 +49,7 @@ OOS_BOOT_UEFI_DEFAULT=1 && aggregate_variable "OOS_BOOT_UEFI";
 OOS_BOOT_ID_DEFAULT=$OOS_INSTALL_NAME && aggregate_variable "OOS_BOOT_ID";
 
 # Packages
-OOS_ADDITIONAL_PACKAGES_DEFAULT="" && aggregate_variable "OOS_ADDITIONAL_PACKAGES";
+OOS_ADDITIONAL_PACKAGES="";
 aggregate_variable "OOS_INSTALL_PACKAGES";
 
 OOS_DEFAULT_PACKAGES_DEFAULT="base vim" && aggregate_variable "OOS_DEFAULT_PACKAGES";
