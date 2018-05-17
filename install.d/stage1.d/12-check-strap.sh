@@ -15,4 +15,7 @@ if [ ! -z "$OOS_MOUNT_FOLDER" ]; then
 	[ "$OOS_MOUNT_FOLDER" = / ] && abort "Mount folder should not be the root folder!";
 fi
 
+# Install arch-install-scripts if pacstrap is not defined
+command_available pacstrap || pacman --no-confirm -S arch-install-scripts;
+
 . $@;
