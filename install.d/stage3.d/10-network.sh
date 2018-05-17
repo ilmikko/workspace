@@ -87,3 +87,4 @@ until oos_connectivity_check; do
 done
 
 log "Huzzah, we're online!";
+. $@;
