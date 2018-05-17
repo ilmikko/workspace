@@ -1,0 +1,86 @@
+autoload -Uz compinit colors && compinit && colors
+
+HISTSIZE=10000
+HISTFILE=$HOME/.zsh_history
+SAVEHIST=10000
+
+setopt appendhistory
+setopt sharehistory
+# Ignore duplicate entries in the history
+setopt HIST_IGNORE_ALL_DUPS
+
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} r:|[._-]=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' max-errors 2
+zstyle ':completion:*' original true
+zstyle ':completion:*' verbose true
+
+battery_info() {
+	BATTERY_STATUS=$(cat /sys/class/power_supply/BAT*/status)
+	BATTERY_LEVEL=$(cat /sys/class/power_supply/BAT*/capacity)
+
+	if [ $BATTERY_STATUS = 'Discharging' ]; then
+		BATTERY_ICON=%{$fg[red]%}
+	elif [ $BATTERY_STATUS = 'Charging' ]; then
+		#BATTERY_ICON=%{$fg[yellow]%}
+		return
+	elif [ $BATTERY_STATUS = 'Full' ]; then
+		#BATTERY_ICON=%{$fg[green]%}
+		return
+	else
+		return
+	fi
+
+	echo %B$BATTERY_ICON$BATTERY_LEVEL%b
+}
+
+git_info() {
+	if [ ! -d '.git' ]; then
+		return
+	fi
+	
+	GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+	GIT_USER=$(git config user.name 2>/dev/null)
+
+	if [ $GIT_BRANCH = 'master' ]; then
+		# Don't really need to show that
+		GIT_BRANCH=''
+	fi
+
+	if [ ! -z "$(git status --porcelain 2>/dev/null)" ]; then
+		# Get diff
+		GIT_ADDS="$(git diff --numstat | cut -f1 | awk '{s+=$1} END {print s}')"
+		GIT_REMOVES="$(git diff --numstat | cut -f2 | awk '{s+=$1} END {print s}')"
+		GIT_CHANGES="$(git diff --numstat | awk '{s+=1} END {print s}')"
+	fi
+
+	if [ ! -z $GIT_ADDS$GIT_REMOVES ]; then
+		# Colors
+		GIT_DIFF=%{$fg[green]%}$GIT_ADDS%{$fg[yellow]%}$GIT_CHANGES%{$fg[red]%}$GIT_REMOVES
+	fi
+
+	echo %B$GIT_USER@$GIT_BRANCH'>'$GIT_DIFF%b
+}
+
+local git_info='$(git_info)'
+local battery_info='$(battery_info)'
+
+PROMPT="%{$fg[cyan]%}%n%{$reset_color%}@%b%{$fg[cyan]%}%B%M%{$reset_color%}%#${battery_info}${git_info}%B%{$fg[magenta]%}%~%{$reset_color%} "
+
+setopt promptsubst
+
+bindkey -v
+
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+bindkey '^[[C' forward-word
+bindkey '^\\' forward-char
