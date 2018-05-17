@@ -49,8 +49,32 @@ case "$OOS_NETWORK_DRIVER" in
 		systemctl disable netctl;
 		systemctl stop netctl;
 
-		# Enable the connection
-		nmcli con up "$OOS_NETWORK_CONFIG_SSID";
+		interface=$(oos_get_wireless_interface);
+
+		systemctl disable netctl;
+		systemctl stop netctl;
+
+		interface=$(oos_get_wireless_interface);
+
+		items="wifi-sec.key-mgmt:KEY_MGMT 802-1x.eap:EAP 802-1x.identity:IDENTITY 802-1x.ca-cert:CA_CERT 802-1x.password:PASSWORD 802-1x.phase2-auth:PHASE2_AUTH 802-1x.client-cert:CLIENT_CERT 802-1x.private-key:PRIVATE_KEY 802-1x.private-key-password:PRIVATE_KEY_PASSWORD";
+		constr="";
+		for item in $items; do
+						convert=(${item/:/ });
+
+						from=${convert[0]};
+						to=OOS_NETWORK_CONFIG_${convert[1]};
+
+						# Convert to value
+						to=$(eval echo \$$to);
+
+						[ -z "$to" ] && continue;
+						constr=$from\ $to\ $constr;
+		done
+
+		nmcli connection down "$OOS_NETWORK_CONFIG_ID" 2>/dev/null;
+		nmcli connection delete "$OOS_NETWORK_CONFIG_ID" 2>/dev/null;
+		nmcli connection add type "$OOS_NETWORK_CONFIG_TYPE" con-name "$OOS_NETWORK_CONFIG_ID" ifname "$interface" ssid "$OOS_NETWORK_CONFIG_SSID" -- $constr;
+		nmcli connection up "$OOS_NETWORK_CONFIG_ID";
 		;;
 	*)
 		error "Cannot connect to the internet - invalid network driver!" "This is most likely due to a bug. Sorry!";
