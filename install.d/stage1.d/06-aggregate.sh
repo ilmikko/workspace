@@ -52,7 +52,7 @@ OOS_BOOT_ID_DEFAULT=$OOS_INSTALL_NAME && aggregate_variable "OOS_BOOT_ID";
 OOS_ADDITIONAL_PACKAGES="";
 aggregate_variable "OOS_INSTALL_PACKAGES";
 
-OOS_DEFAULT_PACKAGES_DEFAULT="base vim" && aggregate_variable "OOS_DEFAULT_PACKAGES";
+OOS_DEFAULT_PACKAGES_DEFAULT="base vim zsh-autosuggestions zsh-history-substring-search" && aggregate_variable "OOS_DEFAULT_PACKAGES";
 
 # hosts
 OOS_HOSTNAME_DEFAULT=$OOS_INSTALL_NAME && aggregate_variable "OOS_HOSTNAME";
